@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "lookahead-89164"
+  },
+  "targets": {
+    "lookahead-89164": {
+      "hosting": {
+        "dev": [
+          "lookahead-dev"
+        ],
+        "prod": [
+          "lookahead"
+        ]
+      }
+    }
+  }
+}
