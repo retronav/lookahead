@@ -1,0 +1,14 @@
+{
+  "name": "@lookahead/functions",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "@vercel/node": "^1.8.4",
+    "axios": "^0.20.0"
+  }
+}

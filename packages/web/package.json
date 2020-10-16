@@ -1,0 +1,54 @@
+{
+  "name": "@lookahead/web",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "run-p dev start:*",
+    "dev": "vite -c vite.config.dev.ts",
+    "start:firebase": "firebase emulators:start --only firestore --import=./.dev-data",
+    "build": "vite build -c vite.config.prod.ts --mode production",
+    "deploy:dev": "npm run build && firebase deploy --only hosting:dev",
+    "test": "jest",
+    "test:serve": "run-p serve start:firebase",
+    "postbuild": "node build-utils/manifestVersion.js && node build-utils/generateSW.js && react-snap",
+    "serve": "firebase serve --only hosting:prod -p 3000"
+  },
+  "reactSnap": {
+    "source": "dist",
+    "inlineCSS": false,
+    "minifyHtml": {
+      "sortClassName": false
+    }
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.56",
+    "@material-ui/styles": "^4.10.0",
+    "@pika/react": "^16.13.1",
+    "@pika/react-dom": "^16.13.1",
+    "firebase": "^7.19.1",
+    "notistack": "^1.0.0",
+    "react-helmet": "^6.1.0",
+    "react-image-crop": "^8.6.5",
+    "react-router-dom": "^5.2.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.14",
+    "@types/node": "^14.11.5",
+    "@types/react-dom": "^16.9.8",
+    "@types/react-helmet": "^6.1.0",
+    "@types/react-image-crop": "^8.1.2",
+    "@types/react-router-dom": "^5.1.5",
+    "@types/workbox-build": "^5.0.0",
+    "esbuild-jest": "^0.2.2",
+    "jest": "^26.5.0",
+    "jest-cli": "^26.5.0",
+    "npm-run-all": "^4.1.5",
+    "puppeteer": "^5.3.1",
+    "react-snap": "^1.23.0",
+    "rollup-plugin-visualizer": "^4.1.1",
+    "vite": "^1.0.0-rc.4",
+    "vite-plugin-react": "^3.0.2",
+    "workbox-build": "^5.1.4"
+  }
+}

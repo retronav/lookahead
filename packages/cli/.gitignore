@@ -1,0 +1,2 @@
+# Folder for binaries built using `go build`
+build/

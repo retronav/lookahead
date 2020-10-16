@@ -1,0 +1,22 @@
+{
+  "short_name": "Lookahead",
+  "name": "Lookahead",
+  "version": "VERSION_STRING",
+  "description": "The fast, beautiful to-do and notes app for everyone.",
+  "icons": [
+    {
+      "src": "/logo-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/logo-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#FFFFFF",
+  "display": "standalone",
+  "theme_color": "#000000"
+}
