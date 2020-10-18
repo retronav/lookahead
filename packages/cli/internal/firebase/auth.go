@@ -41,7 +41,7 @@ func (a FirebaseAuth) UpdateIdToken() {
 	s.Suffix = " retrieving your account"
 	s.Start()
 	apiUrl :=
-		"https://securetoken.googleapis.com/v1/token?key=AIzaSyCoyBjDaB6hS4OJ7DgSbApTNSCEdmn5rmo"
+		"https://securetoken.googleapis.com/v1/token?key=" + AuthAPIKey
 	urlParams := url.Values{}
 	urlParams.Add("grant_type", "refresh_token")
 	urlParams.Add("refresh_token", creds.RefreshToken)
