@@ -23,6 +23,7 @@ import (
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
+	"lookahead.web.app/cli/internal/config"
 )
 
 var Version = "Dev"
@@ -31,15 +32,17 @@ var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "look",
-	Short: "CLI interface of Lookahead (visit https://lookahead.web.app for more info)",
+	Use:     "look",
+	Short:   "CLI interface of Lookahead (visit https://lookahead.web.app for more info)",
+	Version: Version,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
+	rootCmd.SetVersionTemplate("Lookahead CLI version " + Version)
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
+		// fmt.Println(err)
 		os.Exit(1)
 	}
 }
@@ -47,6 +50,8 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.lookahead.yaml)")
+	//Initialize default config
+	viper.SetDefault("numberOfEntries", 5)
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -72,5 +77,6 @@ func initConfig() {
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
+		config.CheckConfigValidity()
 	}
 }

@@ -14,7 +14,7 @@
   },
   "reactSnap": {
     "source": "dist",
-    "inlineCSS": false,
+    "inlineCSS": true,
     "minifyHtml": {
       "sortClassName": false
     }

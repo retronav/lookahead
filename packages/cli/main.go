@@ -23,6 +23,7 @@ import (
 func main() {
 	//Update ID token, if present
 	firebase.Auth.UpdateIdToken()
-	//Rum the CLI!!
+
+	//Run the CLI!!
 	cmd.Execute()
 }

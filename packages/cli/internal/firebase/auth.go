@@ -29,7 +29,7 @@ type updateIdTokenRes struct {
 //if last update time was more than 1 hour ago
 func (a FirebaseAuth) UpdateIdToken() {
 	creds := credential.ReadCredentials()
-	newCreds := credential.CredentialsStruct{}
+	newCreds := credential.CredentialsStruct{LocalId: creds.LocalId}
 	if creds.SignInTimestamp != 0 &&
 		time.Now().Unix()-creds.SignInTimestamp < 3600 {
 		return
