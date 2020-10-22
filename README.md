@@ -41,4 +41,8 @@ This app is current in development. I hope this app to reach production soon :).
 
 # Contributing
 
-See CONTRIBUTING.md
+See CONTRIBUTING.md (not uploaded yet)
+
+# Documentation status (CLI)
+
+The CLI is still far away from becoming a MVP, so documentation work will be procrastinated till I finish working on the CLI.
