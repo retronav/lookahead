@@ -1,3 +1,5 @@
 *.go linguist-language=Go
-*.tsx linguist-language=TypeScript
+*.tsx linguist-detectable
+*.tsx linguist-language=TSX
 *.js linguist-language=JavaScript
+*.css linguist-language=CSS
