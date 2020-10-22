@@ -1,1 +1,3 @@
 *.go linguist-language=Go
+*.tsx linguist-language=TypeScript
+*.js linguist-language=JavaScript
