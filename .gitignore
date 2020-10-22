@@ -69,3 +69,6 @@ node_modules/
 
 # Firebase config file (package @lookahead/web)
 /packages/web/src/components/Firebase/firebaseConfig.ts
+
+# Rollup visualizer stats file
+/packages/web/stats.html
