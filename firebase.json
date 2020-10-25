@@ -18,7 +18,7 @@
   "hosting": [
     {
       "target": "prod",
-      "public": "packages/web/dist",
+      "public": "packages/web/out",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "headers": [
         {
@@ -40,8 +40,19 @@
     },
     {
       "target": "dev",
-      "public": "packages/web/dist",
+      "public": "packages/web/out",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "headers": [
+        {
+          "source": "sw.js",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "max-age=0"
+            }
+          ]
+        }
+      ],
       "rewrites": [
         {
           "source": "**",
