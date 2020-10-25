@@ -1,6 +1,11 @@
 const config = process.env.NEXT_PUBLIC_FIREBASE_APP_CONFIG
   ? //CI
-    JSON.parse(process.env.NEXT_PUBLIC_FIREBASE_APP_CONFIG)
+    JSON.parse(
+      Buffer.from(
+        process.env.NEXT_PUBLIC_FIREBASE_APP_CONFIG,
+        "base64"
+      ).toString("utf8")
+    )
   : //Local
     {
       apiKey: process.env.NEXT_PUBLIC_FIREBASE_CONFIG_APIKEY,

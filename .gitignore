@@ -66,6 +66,3 @@ node_modules/
 
 # Visual Studio Code configuration folder
 .vscode/
-
-# Firebase config file (package @lookahead/web)
-/packages/web/components/Firebase/firebaseConfig.ts
