@@ -18,7 +18,7 @@ jobs:
         run: yarn workspace @lookahead/web build
         # - run: yarn test
       - name: Deploy to Dev build
-        run: yarn workspace @lookahead/web deploy:dev --token $FIREBASE_CI_TOKEN
+        run: yarn workspace @lookahead/web deploy:dev -m "$(git show -s --format=%s)" --token $FIREBASE_CI_TOKEN
         env:
           CI: true
           FIREBASE_CI_TOKEN: ${{ secrets.FIREBASE_CI_TOKEN }}
