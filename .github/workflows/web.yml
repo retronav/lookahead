@@ -14,6 +14,7 @@ jobs:
           node-version: 12.x
       - run: npm install -g firebase-tools
       - run: yarn install
+      - run: node -e "JSON.parse(Buffer.from(process.env.NEXT_PUBLIC_FIREBASE_APP_CONFIG,'base64').toString('utf8'))"
       - name: Build the app
         run: yarn workspace @lookahead/web build
         # - run: yarn test
