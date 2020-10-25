@@ -1,5 +1,4 @@
 name: Lookahead Web App
-description: Action consisting all automated tasks related to Lookahead Web App
 
 on: [push]
 
