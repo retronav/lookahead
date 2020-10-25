@@ -22,3 +22,4 @@ jobs:
         env:
           CI: true
           FIREBASE_CI_TOKEN: ${{ secrets.FIREBASE_CI_TOKEN }}
+          NEXT_PUBLIC_FIREBASE_APP_CONFIG: ${{ secrets.FIREBASE_APP_CONFIG }}
