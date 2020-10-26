@@ -17,7 +17,7 @@ import { LoaderContext } from "../components/Navbar/Loader";
 import Head from "next/head";
 import isBrowser from "../components/util/isBrowser";
 import { useSnackbar } from "notistack";
-export default (): JSX.Element => {
+const signin = (): JSX.Element => {
   //Opt out of prerendering
   if (!isBrowser()) return <></>;
   const {
@@ -31,7 +31,7 @@ export default (): JSX.Element => {
   const router = useRouter();
   if (currentUser) {
     //Send to app if already logged in
-    router.push("/");
+    router.push("/app");
     useSnackbar().enqueueSnackbar("You are already logged in!!", {
       anchorOrigin: {
         vertical: "bottom",
@@ -247,3 +247,5 @@ export default (): JSX.Element => {
     );
   return <></>;
 };
+
+export default signin;

@@ -9,6 +9,9 @@ import {
 import Link from "next/link";
 import { LoaderContext } from "../Navbar/Loader";
 import Head from "next/head";
+import isBrowser from "../util/isBrowser";
+import { useRouter } from "next/router";
+import { authServices } from "../Firebase/services";
 const useStyles = makeStyles((theme) =>
   createStyles({
     parentDiv: {
@@ -35,6 +38,12 @@ const useStyles = makeStyles((theme) =>
   })
 );
 export default function LandingPage() {
+  if (isBrowser()) {
+    const currentUser = authServices().useAuth();
+    if (currentUser) {
+      useRouter().push("/app");
+    }
+  }
   const classes = useStyles();
   const isSmallerThanMD = useMediaQuery("(max-height : 768px)");
   const loader = React.useContext(LoaderContext);

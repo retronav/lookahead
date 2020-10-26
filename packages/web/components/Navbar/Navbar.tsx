@@ -11,7 +11,6 @@ import {
 } from "@material-ui/core";
 import { AccountCircle, Brightness2, BrightnessHigh } from "@material-ui/icons";
 import Authenticated from "../Firebase/Authenticated";
-import { authServices, useIsSignedIn } from "../Firebase/services";
 import { NextRouter } from "next/router";
 import dynamic from "next/dynamic";
 import firebase from "firebase/app";
