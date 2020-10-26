@@ -1,0 +1,2 @@
+*.tsx linguist-language=JSX
+Makefile linguist-language=Makefile
