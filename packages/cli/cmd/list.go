@@ -18,7 +18,6 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"regexp"
 	"strings"
 
 	"github.com/fatih/color"
@@ -31,11 +30,7 @@ import (
 )
 
 func checkStringEmptyOrOnlySpaces(str string) bool {
-	spaceRegexp := regexp.MustCompile(`\s.*`)
-	if str == "" {
-		return true
-	}
-	if spaceRegexp.MatchString(str) {
+	if strings.TrimSpace(str) == "" {
 		return true
 	}
 	return false
@@ -56,9 +51,9 @@ var listCmd = &cobra.Command{
 	Short: "Lists all notes and to-dos of the user",
 	Run: func(cmd *cobra.Command, args []string) {
 		//If user seems to be offline
-		if util.IsOnline() {
+		if !util.IsOnline() {
 			color.HiRed("Offline functionality will be implemented soon." +
-				"But for now, you need to be online to run this command")
+				" But for now, you need to be online to run this command")
 			os.Exit(1)
 		}
 		//If user is logged out
@@ -67,7 +62,7 @@ var listCmd = &cobra.Command{
 				" Use `look login` to login")
 			os.Exit(1)
 		}
-		entriesLimit := viper.GetInt("numberOfEntries")
+		entriesLimit := viper.GetInt("limitEntries")
 		credentials := credential.ReadCredentials()
 		firestore := firebase.Firestore{
 			IdToken: credentials.IdToken,
@@ -79,8 +74,8 @@ var listCmd = &cobra.Command{
 			if i >= entriesLimit {
 				color.HiRed(
 					"If you want to see more than %d entries, "+
-						"please set the `numberOfEntries` flag in the configuration file"+
-						" or use the `-n` flag in the command",
+						"please set the `limitEntries` flag in the configuration file"+
+						" or use the `-l` flag in the command",
 					entriesLimit,
 				)
 				break
@@ -101,10 +96,10 @@ func init() {
 	//Show this command as suggestion when these non-existent commands are used
 	listCmd.SuggestFor = []string{"notes", "todos", "show"}
 	listCmd.PersistentFlags().Int16P(
-		"numberOfEntries",
-		"n",
+		"limitEntries",
+		"l",
 		0,
 		"configure the number of entries the CLI shows on running `look list`")
 	//Bind flag to viper for precedence
-	viper.BindPFlag("numberOfEntries", listCmd.PersistentFlags().Lookup("numberOfEntries"))
+	viper.BindPFlag("limitEntries", listCmd.PersistentFlags().Lookup("limitEntries"))
 }
