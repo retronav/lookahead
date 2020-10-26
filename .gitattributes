@@ -1,2 +1,4 @@
-*.tsx linguist-language=JSX
+*.tsx linguist-language=TSX
+*.js linguist-language=JavaScript
+*.css linguist-language=CSS
 Makefile linguist-language=Makefile
