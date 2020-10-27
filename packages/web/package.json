@@ -9,7 +9,7 @@
     "dev": "next dev",
     "dev:firebase": "firebase emulators:start --only firestore --import=./.dev-data",
     "deploy:dev": "firebase deploy --only hosting:dev",
-    "start": "next start", 
+    "start": "next start",
     "serve": "firebase serve --only hosting:prod -p 3000",
     "test": "jest"
   },
