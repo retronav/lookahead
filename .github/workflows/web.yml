@@ -23,7 +23,7 @@ jobs:
         env:
           NEXT_PUBLIC_FIREBASE_APP_CONFIG: ${{ secrets.FIREBASE_APP_CONFIG }}
       - name: Run tests
-        run: yarn test
+        run: yarn workspace @lookahead/web test
       - name: Deploy to Dev build
         run: yarn workspace @lookahead/web deploy:dev -m "$(git show -s --format=%s)" --token $FIREBASE_CI_TOKEN
         env:
