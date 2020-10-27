@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "run-s build:*",
-    "build:app": "rm -rf .next && yarn next build && yarn next export",
+    "build:app": "rm -rf .next && next build && next export",
     "build:sw": "node scripts/generateSW.js",
     "dev": "next dev",
     "dev:firebase": "firebase emulators:start --only firestore --import=./.dev-data",
