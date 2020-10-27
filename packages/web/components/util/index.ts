@@ -1,4 +1,4 @@
-export const checkEmptyStr = (str: string) => str === "" || !/\S/.test(str);
+export const checkEmptyStr = (str: string) => str.trim() === "";
 export type LastEdited = {
   date: string;
   time: string;
