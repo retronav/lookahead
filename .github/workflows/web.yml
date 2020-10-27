@@ -1,6 +1,8 @@
 name: Lookahead Web App
 
-on: [push]
+on:
+  push:
+    paths: "packages/web/**"
 
 jobs:
   build:
