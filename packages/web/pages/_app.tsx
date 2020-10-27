@@ -69,15 +69,17 @@ function MyApp({ Component, pageProps }) {
           <LoaderContext.Provider value={loaderStuff}>
             <CssBaseline />
             <div className={classes.appbar}></div>
-            <Head>
-              <meta
-                name="theme-color"
-                content={
-                  //@ts-ignore
-                  theme.theme.palette.primary[500] || ""
-                }
-              />
-            </Head>
+            {isBrowser() && (
+              <Head>
+                <meta
+                  name="theme-color"
+                  content={
+                    //@ts-ignore
+                    theme.theme.palette.primary[500] || ""
+                  }
+                />
+              </Head>
+            )}
             <Navbar
               historyHook={useRouter()}
               themeHook={theme}
