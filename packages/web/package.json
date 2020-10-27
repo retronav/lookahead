@@ -11,7 +11,7 @@
     "deploy:dev": "firebase deploy --only hosting:dev",
     "start": "next start",
     "serve": "firebase serve --only hosting:prod -p 3000",
-    "test": "jest"
+    "test": "jest" 
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
