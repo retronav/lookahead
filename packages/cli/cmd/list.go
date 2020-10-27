@@ -17,7 +17,6 @@ package cmd
 
 import (
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/fatih/color"
@@ -26,6 +25,7 @@ import (
 	"github.com/tidwall/gjson"
 	"lookahead.web.app/cli/internal/credential"
 	"lookahead.web.app/cli/internal/firebase"
+	"lookahead.web.app/cli/internal/logging"
 	"lookahead.web.app/cli/internal/util"
 )
 
@@ -52,15 +52,13 @@ var listCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		//If user seems to be offline
 		if !util.IsOnline() {
-			color.HiRed("Offline functionality will be implemented soon." +
+			logging.Error(1, "Offline functionality will be implemented soon."+
 				" But for now, you need to be online to run this command")
-			os.Exit(1)
 		}
 		//If user is logged out
 		if credential.CheckIfUserLoggedIn() == false {
-			color.HiRed("You should be logged in to run this command!!" +
+			logging.Error(1, "You should be logged in to run this command!!"+
 				" Use `look login` to login")
-			os.Exit(1)
 		}
 		entriesLimit := viper.GetInt("limitEntries")
 		credentials := credential.ReadCredentials()
@@ -72,7 +70,7 @@ var listCmd = &cobra.Command{
 		documents := todoCollection.Documents
 		for i, todo := range documents {
 			if i >= entriesLimit {
-				color.HiRed(
+				logging.Warn(
 					"If you want to see more than %d entries, "+
 						"please set the `limitEntries` flag in the configuration file"+
 						" or use the `-l` flag in the command",
