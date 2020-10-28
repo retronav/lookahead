@@ -11,7 +11,9 @@
     "deploy:dev": "firebase deploy --only hosting:dev",
     "start": "next start",
     "serve": "firebase serve --only hosting:prod -p 3000",
-    "test": "jest" 
+    "test": "yarn test:unit && yarn test:e2e",
+    "test:unit": "jest",
+    "test:e2e": "cypress run"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
@@ -26,13 +28,14 @@
     "react-image-crop": "^8.6.6"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^9.5.5",
     "@types/jest": "^26.0.14",
     "@types/node": "^14.11.5",
+    "@zeit/next-source-maps": "^0.0.3",
+    "cypress": "^5.5.0",
     "esbuild-jest": "^0.2.2",
     "jest": "^26.5.0",
     "jest-cli": "^26.5.0",
-    "@next/bundle-analyzer": "^9.5.5",
-    "@zeit/next-source-maps": "^0.0.3",
     "npm-run-all": "^4.1.5",
     "serve": "^11.3.2",
     "typescript": "^4.0.3",
