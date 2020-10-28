@@ -11,10 +11,11 @@
     "deploy:dev": "firebase deploy --only hosting:dev",
     "start": "next start",
     "serve": "firebase serve --only hosting:prod -p 3000",
+    "serve:ci": "firebase serve --only hosting:prod -p 3000 --token $FIREBASE_CI_TOKEN",
     "test": "yarn test:unit && yarn test:e2e:serve",
     "test:unit": "jest",
     "test:e2e": "cypress run",
-    "test:e2e:serve": "start-server-and-test serve http://localhost:3000 test:e2e"
+    "test:e2e:serve": "start-server-and-test \"yarn serve:ci\" http://localhost:3000 \"yarn test:e2e\""
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
