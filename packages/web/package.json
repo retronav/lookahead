@@ -15,7 +15,7 @@
     "test": "yarn test:unit && yarn test:e2e:serve",
     "test:unit": "jest",
     "test:e2e": "cypress run",
-    "test:e2e:serve": "start-server-and-test \"yarn serve:ci\" http://localhost:3000 \"yarn test:e2e\""
+    "test:e2e:serve": "start-server-and-test \"yarn serve:ci\" http://localhost:3000 \"yarn test:e2e\"" 
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
