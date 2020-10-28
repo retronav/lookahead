@@ -11,9 +11,10 @@
     "deploy:dev": "firebase deploy --only hosting:dev",
     "start": "next start",
     "serve": "firebase serve --only hosting:prod -p 3000",
-    "test": "yarn test:unit && yarn test:e2e",
+    "test": "yarn test:unit && yarn test:e2e:serve",
     "test:unit": "jest",
-    "test:e2e": "cypress run"
+    "test:e2e": "cypress run",
+    "test:e2e:serve": "start-server-and-test serve http://localhost:3000 test:e2e"
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
@@ -38,6 +39,7 @@
     "jest-cli": "^26.5.0",
     "npm-run-all": "^4.1.5",
     "serve": "^11.3.2",
+    "start-server-and-test": "^1.11.5",
     "typescript": "^4.0.3",
     "workbox-build": "^5.1.4"
   }
