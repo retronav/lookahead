@@ -6,6 +6,11 @@ export default class MainDocument extends Document {
     return (
       <Html lang="en">
         <Head>
+          {/* Google Webmasters Search Console Verfication */}
+          <meta
+            name="google-site-verification"
+            content="bBbu-us55TtkhIlowo0Bs90ZyqA2PVxsq0qgo3rFkLA"
+          />
           <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
           <link rel="manifest" href="/manifest.json" />
           <link rel="apple-touch-icon" href="/logo-192.png" />
