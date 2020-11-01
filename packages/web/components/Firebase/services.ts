@@ -37,17 +37,14 @@ export const authServices = () => {
     return user;
   };
   const { setSignedIn } = useIsSignedIn();
-  const signInWithGoogle = async (
-    history: NextRouter,
-    openSnackBar: Function
-  ) => {
+  const signInWithGoogle = async (openSnackBar: Function) => {
     const provider = new firebase.auth.GoogleAuthProvider();
     try {
       await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
       await auth.signInWithPopup(provider);
       setSignedIn(true);
       if (auth.currentUser) setUser(auth.currentUser);
-      history.push("/");
+      if (isBrowser()) window.location.pathname = "/app";
     } catch (e) {
       openSnackBar(e.message || e);
       throw e;

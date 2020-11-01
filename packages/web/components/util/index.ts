@@ -21,8 +21,12 @@ export const getDate = (dateObj?: Date) => {
   ];
   return {
     date: `${date.getDate()} ${months[date.getMonth()]}, ${date.getFullYear()}`,
-    time: `${date.getHours() === 0 ? "00" : date.getHours()}:${
-      date.getMinutes() === 0 ? "00" : date.getMinutes()
+    time: `${
+      date.getHours() === 0 ? "00" : date.getHours().toString().padStart(2, "0")
+    }:${
+      date.getMinutes() === 0
+        ? "00"
+        : date.getMinutes().toString().padStart(2, "0")
     }`,
   };
 };

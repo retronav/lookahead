@@ -118,7 +118,7 @@ const signin = (): JSX.Element => {
         if (provider === "google")
           return (
             <Button
-              onClick={() => signInWithGoogle(router, openSnackBar)}
+              onClick={() => signInWithGoogle(openSnackBar)}
               variant="outlined"
               color="secondary"
             >

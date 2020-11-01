@@ -7,15 +7,14 @@
     "build:app": "next build && next export",
     "build:sw": "node scripts/generateSW.js",
     "dev": "next dev",
-    "dev:firebase": "firebase emulators:start --only firestore --import=./.dev-data",
+    "dev:firebase": "firebase emulators:start --only auth,firestore --import=./.dev-data",
     "deploy:dev": "firebase deploy --only hosting:dev",
     "start": "next start",
-    "serve": "firebase serve --only hosting:prod -p 3000",
-    "serve:ci": "firebase serve --only hosting:prod -p 3000 --token $FIREBASE_CI_TOKEN",
+    "serve": "node scripts/quietHosting.js",
     "test": "yarn test:unit && yarn test:e2e:serve",
     "test:unit": "jest",
     "test:e2e": "cypress run",
-    "test:e2e:serve": "start-server-and-test \"yarn serve:ci\" http://localhost:3000 \"yarn test:e2e\""
+    "test:e2e:serve": "start-server-and-test \"yarn serve\" http://localhost:3000 \"yarn test:e2e\""
   },
   "dependencies": {
     "@material-ui/core": "^4.11.0",
