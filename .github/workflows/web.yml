@@ -2,7 +2,7 @@ name: Lookahead Web App
 
 on:
   push:
-    paths: "packages/web/**"
+    paths: ["packages/web/**"]
 
 jobs:
   build:
@@ -20,7 +20,7 @@ jobs:
 
       - uses: actions/cache@v2
         id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
-         with:
+        with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
