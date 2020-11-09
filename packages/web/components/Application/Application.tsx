@@ -14,20 +14,25 @@ import TodoSkeleton from "./TodoSkeleton";
 import { LoaderContext } from "../Navbar/Loader";
 import CreateTodo from "../Todo/CreateTodo";
 
-interface TodoData {
+export interface TodoData {
   title: string;
   content: string;
   id: string;
+  last_edited: string;
 }
-
+declare global {
+  interface Window {
+    __activeTodo: TodoData;
+  }
+}
 const Application = () => {
   const [collection, setCollection] = useState<TodoData[] | null>(null);
   const [fetchedData, setFetchedData] = useState(false);
   const [dialogState, setDialogState] = useState({
     open: false,
     key: "",
+    data: null,
   });
-  const [createNewDialogState, setNewDialogState] = useState(false);
   const [
     firestoreHook,
     setFirestore,
@@ -80,6 +85,17 @@ const Application = () => {
       if (navigator.userAgent !== "ReactSnap") loader.stop();
     })();
   }, []);
+
+  const openTodoDialog = (key: string) => {
+    setDialogState({
+      open: true,
+      key: key,
+      data: collection.find((doc) => doc.id == key),
+    });
+  };
+  const closeTodoDialog = () => {
+    setDialogState({ open: false, key: "", data: null });
+  };
   return (
     <>
       <Head>
@@ -93,15 +109,15 @@ const Application = () => {
           <EditTodo
             firestore={firestoreHook}
             dialogState={dialogState}
-            handleClose={() => setDialogState({ open: false, key: "" })}
+            handleClose={closeTodoDialog}
           />
         )}
         {collection ? (
           collection.map((doc) => (
             <Todo
               handles={{
-                open: (key) => setDialogState({ open: true, key: key }),
-                close: () => setDialogState({ open: false, key: "" }),
+                open: openTodoDialog,
+                close: closeTodoDialog,
               }}
               id={doc.id}
               key={doc.id}
@@ -119,4 +135,4 @@ const Application = () => {
   );
 };
 
-export default Application
+export default Application;

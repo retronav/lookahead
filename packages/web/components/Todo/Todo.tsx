@@ -57,8 +57,25 @@ const Todo = ({ title, content, handles, id }: Props) => {
           <ButtonBase onClick={updateTodo} className={classes.cardContent}>
             <CardContent className={classes.cardContent}>
               <Typography variant="h5">{title}</Typography>
-              <Typography noWrap={true} variant="body1" component="p">
-                {content}
+              <Typography
+                noWrap={true}
+                variant="body1"
+                component="p"
+                style={{ height: "3em", overflowY: "hidden" }}
+              >
+                {content.split("\n").map((l, i) => {
+                  if (i <= 1) {
+                    return (
+                      <span key={i}>
+                        {l +
+                          (i === 1 && content.split("\n").length > 2
+                            ? " ..."
+                            : "")}
+                        <br />
+                      </span>
+                    );
+                  } else return;
+                })}
               </Typography>
             </CardContent>
           </ButtonBase>

@@ -12,8 +12,9 @@ import { useSnackbar } from "notistack";
 import * as React from "react";
 import { checkEmptyStr, getDate, LastEdited } from "../util";
 import { authServices } from "../Firebase/services";
+import { TodoData } from "../Application/Application";
 interface Props {
-  dialogState: { open: boolean; key: string };
+  dialogState: { open: boolean; key: string; data: TodoData };
   handleClose: () => void;
   firestore: firebase.firestore.Firestore | null;
 }
@@ -57,41 +58,29 @@ const EditTodo = ({ dialogState, handleClose, firestore }: Props) => {
   const { useAuth } = authServices();
   const todaysDate = getDate();
   const currentUser = useAuth();
-  const [fetchedData, setFetchedData] = React.useState(false);
-  const [title, setTitle] = React.useState("");
-  const [content, setContent] = React.useState("");
-  const [lastEdited, setLastEdited] = React.useState<LastEdited>({
-    date: "",
-    time: "",
-  });
+  const [title, setTitle] = React.useState(dialogState.data.title);
+  const [content, setContent] = React.useState(dialogState.data.content);
+  const [lastEdited, setLastEdited] = React.useState<LastEdited>(
+    JSON.parse(dialogState.data.last_edited)
+  );
   const snackbar = useSnackbar();
-  if (dialogState.open && !fetchedData)
-    firestore
-      ?.doc(
-        `users/${currentUser ? currentUser.uid : ""}/todos/${dialogState.key}`
-      )
-      .get()
-      .then((doc) => {
-        setFetchedData(true);
-        const data = doc.data();
-        if (data) {
-          setTitle(data.title);
-          setContent(data.content);
-          setLastEdited(JSON.parse(data.last_edited));
-        }
-      });
   const classes = useStyles();
   const handleSave = () => {
     handleClose();
-    firestore
-      ?.doc(
-        `users/${currentUser ? currentUser.uid : ""}/todos/${dialogState.key}`
-      )
-      .update({
-        content: content,
-        title: title,
-        last_edited: JSON.stringify(getDate()),
-      });
+    // Additional check to prevent useless document updataes
+    if (
+      title !== dialogState.data.title ||
+      content !== dialogState.data.content
+    )
+      firestore
+        ?.doc(
+          `users/${currentUser ? currentUser.uid : ""}/todos/${dialogState.key}`
+        )
+        .update({
+          content: content,
+          title: title,
+          last_edited: JSON.stringify(getDate()),
+        });
   };
   const handleDelete = () => {
     handleClose();
@@ -157,6 +146,8 @@ const EditTodo = ({ dialogState, handleClose, firestore }: Props) => {
         />
       </DialogContent>
       <p style={{ textAlign: "right", margin: 0, paddingRight: "1em" }}>
+        <small>ID : {dialogState.data.id}</small>
+        <br />
         {lastEdited && (
           <small>
             Edited

@@ -13,6 +13,7 @@ const App = () => {
   return (
     <>
       <Authenticated
+        loading={<LazyLoader />}
         noAuth={
           <>
             {isBrowser() && window.localStorage.getItem("isSignedIn") !== "true"

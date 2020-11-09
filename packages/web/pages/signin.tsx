@@ -17,6 +17,7 @@ import { LoaderContext } from "../components/Navbar/Loader";
 import Head from "next/head";
 import isBrowser from "../components/util/isBrowser";
 import { useSnackbar } from "notistack";
+import LazyLoader from "../components/Application/LazyLoader";
 const signin = (): JSX.Element => {
   //Opt out of prerendering
   if (!isBrowser()) return <></>;
@@ -169,7 +170,7 @@ const signin = (): JSX.Element => {
         setUserStatus(await signInWithEmailLink());
       }
     })();
-    if (userStatus === "oldUser") return <div>Loading</div>;
+    if (userStatus === "oldUser") return <LazyLoader />;
     if (auth && auth.currentUser && !auth.currentUser.displayName)
       return (
         <div>
