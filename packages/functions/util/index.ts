@@ -1,7 +1,7 @@
 // Though this function is defined in packages/web/components/util.index.ts,
 // This is going to be pushed to the serverless env
 export const getDate = (dateObj?: Date) => {
-  const date = dateObj ?? new Date();
+  const date = dateObj || new Date();
   const months = [
     "Jan",
     "Feb",

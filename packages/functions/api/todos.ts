@@ -10,6 +10,7 @@ const app = admin.initializeApp({
   ),
 });
 export default async (req: NowRequest, res: NowResponse) => {
+  console.log("body", req.body);
   const firestore = app.firestore();
   const userToken: string = (req.headers.authorization as string).split(
     "Bearer "
@@ -55,6 +56,7 @@ export default async (req: NowRequest, res: NowResponse) => {
           );
         res.status(200).send({ message: "OK" });
       } catch (e) {
+        console.error(e);
         res.status(500).send({ message: "Internal Server Error" });
       }
       break;
@@ -76,6 +78,7 @@ export default async (req: NowRequest, res: NowResponse) => {
           .delete();
         res.status(200).send({ message: "OK" });
       } catch (e) {
+        console.error(e);
         res.status(500).send({ message: "Internal Server Error" });
       }
       break;
@@ -100,6 +103,7 @@ export default async (req: NowRequest, res: NowResponse) => {
           .add({ ...req.body.data, last_edited: JSON.stringify(getDate()) });
         res.status(200).send({ message: "OK" });
       } catch (e) {
+        console.error(e);
         res.status(500).send({ message: "Internal Server Error" });
       }
       break;
