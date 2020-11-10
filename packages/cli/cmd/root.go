@@ -20,13 +20,12 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+	"lookahead.web.app/cli/internal/version"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 	"lookahead.web.app/cli/internal/config"
 )
-
-var Version = "Dev"
 
 var cfgFile string
 
@@ -34,13 +33,13 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:     "look",
 	Short:   "CLI interface of Lookahead (visit https://lookahead.web.app for more info)",
-	Version: Version,
+	Version: version.Version,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
-	rootCmd.SetVersionTemplate("Lookahead CLI version " + Version)
+	rootCmd.SetVersionTemplate("Lookahead CLI version " + version.Version)
 	if err := rootCmd.Execute(); err != nil {
 		// fmt.Println(err)
 		os.Exit(1)

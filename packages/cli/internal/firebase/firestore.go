@@ -7,3 +7,17 @@ package firebase
 type Firestore struct {
 	IdToken string //The Firebase ID Token of the user
 }
+
+type IFirestore interface {
+	GetDocument(path string) Document
+	GetCollection(path string) DocumentCollection
+	WriteDocument(path string, data map[string]interface{}) error
+}
+
+var apiEndpoint = "https://firestore.googleapis.com/v1"
+var projectFirestoreEndpoint = apiEndpoint +
+	"/projects/lookahead-89164/databases/(default)/documents/"
+
+func DocPathToURL(path string) string {
+	return apiEndpoint + projectFirestoreEndpoint + "/" + path
+}

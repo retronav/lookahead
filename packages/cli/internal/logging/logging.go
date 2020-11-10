@@ -41,3 +41,4 @@ func Error(exitCode int, str string, a ...interface{}) {
 var Warn = logFactory(emoji.Warning.String(), "!", color.HiYellowString)
 var Success = logFactory(emoji.CheckMark.String(), "!", color.HiGreenString)
 var Info = logFactory(emoji.Information.String(), ">", color.HiBlueString)
+var Ask = logFactory(emoji.QuestionMark.String(), "?", color.HiCyanString)

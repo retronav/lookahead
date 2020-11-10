@@ -18,6 +18,7 @@ package cmd
 import (
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
+	"lookahead.web.app/cli/internal/version"
 )
 
 // versionCmd represents the version command
@@ -25,7 +26,7 @@ var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Displays the version of the CLI",
 	Run: func(cmd *cobra.Command, args []string) {
-		color.HiCyan("Lookahead CLI version %s", Version)
+		color.HiCyan("Lookahead CLI version %s", version.Version)
 	},
 }
 

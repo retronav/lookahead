@@ -24,8 +24,8 @@ import (
 	"github.com/spf13/viper"
 	"github.com/tidwall/gjson"
 	"lookahead.web.app/cli/internal/credential"
-	"lookahead.web.app/cli/internal/firebase"
 	"lookahead.web.app/cli/internal/logging"
+	"lookahead.web.app/cli/internal/rest"
 	"lookahead.web.app/cli/internal/util"
 )
 
@@ -45,6 +45,20 @@ func getLastPathOfDocId(docId string) string {
 	return arr[len(arr)-1]
 }
 
+func printWholeTodo(todo map[string]interface{}) {
+	fmt.Println("Todo id:", getLastPathOfDocId(todo["id"].(string)))
+	color.HiCyan(fmt.Sprint(todo["title"]))
+	if !checkStringEmptyOrOnlySpaces(fmt.Sprint(todo["content"])) {
+		fmt.Println(todo["content"])
+	}
+	fmt.Println(lastEditedStringFormat(fmt.Sprint(todo["last_edited"])))
+	fmt.Println()
+}
+
+func printOnlyId(todo map[string]interface{}) {
+	// TODO(me): Implement print-ID-only functionality
+}
+
 // listCmd represents the show command
 var listCmd = &cobra.Command{
 	Use:   "list",
@@ -61,13 +75,13 @@ var listCmd = &cobra.Command{
 				" Use `look login` to login")
 		}
 		entriesLimit := viper.GetInt("limitEntries")
-		credentials := credential.ReadCredentials()
-		firestore := firebase.Firestore{
-			IdToken: credentials.IdToken,
+		// -----------------------------------------
+		// Implement get-by-id only
+		// -----------------------------------------
+		documents, err := rest.RestClient.GetAll()
+		if err != nil {
+			panic(err)
 		}
-		todoPath := fmt.Sprintf("users/%s/todos", credentials.LocalId)
-		todoCollection := firestore.GetCollection(todoPath)
-		documents := todoCollection.Documents
 		for i, todo := range documents {
 			if i >= entriesLimit {
 				logging.Warn(
@@ -78,13 +92,7 @@ var listCmd = &cobra.Command{
 				)
 				break
 			}
-			fmt.Println("Todo id:", getLastPathOfDocId(todo.Id))
-			color.HiCyan(fmt.Sprint(todo.Data["title"]))
-			if !checkStringEmptyOrOnlySpaces(fmt.Sprint(todo.Data["content"])) {
-				fmt.Println(todo.Data["content"])
-			}
-			fmt.Println(lastEditedStringFormat(fmt.Sprint(todo.Data["last_edited"])))
-			fmt.Println()
+			printWholeTodo(todo)
 		}
 	},
 }

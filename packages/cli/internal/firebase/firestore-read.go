@@ -13,15 +13,6 @@ import (
 //jsonString represents a string containing valid JSON
 type jsonString = string
 
-var apiEndpoint = "https://firestore.googleapis.com/v1"
-var projectFirestoreEndpoint = apiEndpoint +
-	"/projects/lookahead-89164/databases/(default)/documents/"
-
-type IFirestore interface {
-	GetDocument(path string) Document
-	GetCollection(path string) DocumentCollection
-}
-
 //GetDocument Fetch a document from Firestore.
 //
 //Path format:
