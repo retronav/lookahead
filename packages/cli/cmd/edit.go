@@ -32,10 +32,13 @@ import (
 var editCmd = &cobra.Command{
 	Use:   "edit [id]",
 	Short: "Update a todo/note by specifying its ID.",
-	Long: `This command is useful to update the metadata stored in your notes.
+	Long: `Update a todo/note by specifying its ID.
 
 To know the ID of the note you're looking for, run "look list". The output
-will contain the ID specified. Grab the ID and then run this command.	`,
+will contain the ID specified. Grab the ID and then run this command.
+
+By default, editing the content is disabled. If you need to edit the content, then you need
+to pass the -c flag.`,
 	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		//If user seems to be offline
@@ -49,26 +52,28 @@ will contain the ID specified. Grab the ID and then run this command.	`,
 				" Use `look login` to login")
 		}
 		id := args[0]
+		shouldEditContent, _ := cmd.Flags().GetBool("content")
 
 		var content string
 		logging.Ask("Enter the title to be updated: ")
 		reader := bufio.NewReader(os.Stdin)
 		title, _ := reader.ReadString(byte('\n'))
 		fmt.Println("")
-
-		logging.Ask("Enter the content to be updated" +
-			"(optional; multiline; Ctrl-X and hit ENTER to quit): ")
-		scanner := bufio.NewScanner(os.Stdin)
-		for scanner.Scan() {
-			if scanner.Bytes()[0] == /* Ctrl-X ASCII code */ 24 {
-				break
+		if shouldEditContent {
+			logging.Ask("Enter the content to be updated" +
+				"(optional; multiline; Ctrl-X and hit ENTER to quit): ")
+			scanner := bufio.NewScanner(os.Stdin)
+			for scanner.Scan() {
+				if scanner.Bytes()[0] == /* Ctrl-X ASCII code */ 24 {
+					break
+				}
+				if scanner.Text() != "" {
+					content += scanner.Text() + "\n"
+				}
 			}
-			if scanner.Text() != "" {
-				content += scanner.Text() + "\n"
-			}
+			//Trim trailing and leading newlines
+			content = strings.Trim(content, "\n")
 		}
-		//Trim trailing and leading newlines
-		content = strings.Trim(content, "\n")
 
 		err := rest.RestClient.Set(id, title, content)
 		if err != nil {
@@ -80,4 +85,5 @@ will contain the ID specified. Grab the ID and then run this command.	`,
 
 func init() {
 	rootCmd.AddCommand(editCmd)
+	editCmd.Flags().BoolP("content", "c", false, "Set this flag to edit the content.")
 }
