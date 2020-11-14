@@ -93,6 +93,7 @@ export default async (req: NowRequest, res: NowResponse) => {
       try {
         await postSchema.validateAsync(req.body);
       } catch (e) {
+        console.error(e);
         res.status(400).send(e);
         return;
       }
