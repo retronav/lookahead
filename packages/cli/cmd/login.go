@@ -30,6 +30,7 @@ import (
 	"github.com/spf13/cobra"
 	"lookahead.web.app/cli/internal/credential"
 	"lookahead.web.app/cli/internal/http"
+	"lookahead.web.app/cli/internal/logging"
 )
 
 // loginCmd represents the login command
@@ -64,15 +65,13 @@ var loginCmd = &cobra.Command{
 			loginTokensJSON, _ := json.Marshal(loginTokens)
 			err := ioutil.WriteFile(credsLoc, []byte(loginTokensJSON), 0666)
 			if err != nil {
-				color.HiRed("Couldn't save credentials. Make sure you have" +
+				logging.Error(1, "Couldn't save credentials. Make sure you have"+
 					" the permissions to save files :(")
-				os.Exit(1)
 			}
 			s.Stop()
-			color.HiGreen("Logged in successfully!!")
+			logging.Success("Logged in successfully!!")
 		} else {
-			color.HiRed("Failed to send the email :(")
-			os.Exit(1)
+			logging.Error(1, "Failed to send the email :(")
 		}
 	},
 }

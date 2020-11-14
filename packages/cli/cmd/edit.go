@@ -16,13 +16,12 @@ limitations under the License.
 package cmd
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/spf13/cobra"
 	"lookahead.web.app/cli/internal/credential"
+	"lookahead.web.app/cli/internal/input"
 	"lookahead.web.app/cli/internal/logging"
 	"lookahead.web.app/cli/internal/rest"
 	"lookahead.web.app/cli/internal/util"
@@ -53,24 +52,15 @@ to pass the -c flag.`,
 		}
 		id := args[0]
 		shouldEditContent, _ := cmd.Flags().GetBool("content")
-
-		var content string
-		logging.Ask("Enter the title to be updated: ")
-		reader := bufio.NewReader(os.Stdin)
-		title, _ := reader.ReadString(byte('\n'))
+		title := ""
+		title = input.Input("Enter the title to be updated: ")
+		for []byte(title)[0] == /*Newline*/ 13 {
+			title = input.Input("Enter the title to be updated: ")
+		}
 		fmt.Println("")
+		content := ""
 		if shouldEditContent {
-			logging.Ask("Enter the content to be updated" +
-				"(optional; multiline; Ctrl-X and hit ENTER to quit): ")
-			scanner := bufio.NewScanner(os.Stdin)
-			for scanner.Scan() {
-				if scanner.Bytes()[0] == /* Ctrl-X ASCII code */ 24 {
-					break
-				}
-				if scanner.Text() != "" {
-					content += scanner.Text() + "\n"
-				}
-			}
+			content = input.MultilineInput("Enter the content to be updated")
 			//Trim trailing and leading newlines
 			content = strings.Trim(content, "\n")
 		}

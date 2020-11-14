@@ -83,7 +83,7 @@ var listCmd = &cobra.Command{
 			panic(err)
 		}
 		for i, todo := range documents {
-			if i >= entriesLimit {
+			if entriesLimit > 0 && i >= entriesLimit {
 				logging.Warn(
 					"If you want to see more than %d entries, "+
 						"please set the `limitEntries` flag in the configuration file"+
