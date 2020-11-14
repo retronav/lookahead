@@ -31,13 +31,37 @@ type restClientMethods interface {
 	Set()
 }
 
-func (c restClientStruct) Add()    {}
+func (c restClientStruct) Add(title string, content string) error {
+	reqBodyData := map[string]string{
+		"title":   title,
+		"content": content,
+	}
+	reqBody := map[string]interface{}{
+		"data": reqBodyData,
+	}
+	reqBodyJSON, _ := json.Marshal(reqBody)
+	req, _ := http.NewRequest(http.MethodPost, getAPIEndpoint(), bytes.NewBuffer(reqBodyJSON))
+	req.Header.Add("Authorization", "Bearer "+c.idToken)
+	req.Header.Add("Content-Type", "application/json")
+
+	res, err := c.httpClient.Do(req)
+
+	if err != nil {
+		return err
+	}
+	resBody, _ := ioutil.ReadAll(res.Body)
+	resMsg := gjson.GetBytes(resBody, "message").Str
+	if resMsg != "OK" {
+		return errors.New("There was some problem on our side. Sorry for incovenience!!")
+	}
+	return nil
+}
 func (c restClientStruct) Delete() {}
 
 // GetAll fetch all the user todos from the serverless API.
 // To identify the user, the user-authenticated OAuth2 token or a Firebase ID token.
 func (c restClientStruct) GetAll() ([]map[string]interface{}, error) {
-	req, _ := http.NewRequest("GET", getAPIEndpoint(), nil)
+	req, _ := http.NewRequest(http.MethodGet, getAPIEndpoint(), nil)
 	req.Header.Add("Authorization", "Bearer "+c.idToken)
 
 	res, err := c.httpClient.Do(req)
