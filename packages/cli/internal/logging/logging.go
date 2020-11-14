@@ -16,7 +16,7 @@ var stdout io.Writer = colorable.NewColorableStdout()
 
 type formatterFunc = func(str string, a ...interface{}) string
 
-func logFactory(emoji string, fallbackEmoji string, colorMethod formatterFunc) func(str string, a ...interface{}) {
+func logFactory(emoji string, fallbackEmoji string, colorMethod formatterFunc, newLine bool) func(str string, a ...interface{}) {
 	return func(str string, a ...interface{}) {
 		switch runtime.GOOS {
 		case "windows":
@@ -29,16 +29,21 @@ func logFactory(emoji string, fallbackEmoji string, colorMethod formatterFunc) f
 		default:
 			fmt.Print(emoji + " ")
 		}
-		fmt.Printf(str+"\n", a...)
+		if newLine {
+
+			fmt.Printf(str+"\n", a...)
+		} else {
+			fmt.Printf(str, a...)
+		}
 	}
 }
 
 func Error(exitCode int, str string, a ...interface{}) {
-	errorLogger := logFactory(emoji.CrossMark.String(), "!!", color.HiRedString)
+	errorLogger := logFactory(emoji.CrossMark.String(), "!!", color.HiRedString, true)
 	errorLogger(str, a...)
 }
 
-var Warn = logFactory(emoji.Warning.String(), "!", color.HiYellowString)
-var Success = logFactory(emoji.CheckMark.String(), "!", color.HiGreenString)
-var Info = logFactory(emoji.Information.String(), ">", color.HiBlueString)
-var Ask = logFactory(emoji.QuestionMark.String(), "?", color.HiCyanString)
+var Warn = logFactory(emoji.Warning.String(), "!", color.HiYellowString, true)
+var Success = logFactory(emoji.CheckMark.String(), "!", color.HiGreenString, true)
+var Info = logFactory(emoji.Information.String(), ">", color.HiBlueString, true)
+var Ask = logFactory(emoji.QuestionMark.String(), "?", color.HiCyanString, false)
