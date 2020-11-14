@@ -28,8 +28,7 @@ jobs:
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
       - name: Install dependencies
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
-        run: yarn install
+        run: yarn install --prefer-offline
       - name: Build the app
         run: yarn workspace @lookahead/web build
         env:
