@@ -6,7 +6,7 @@ import (
 )
 
 func CheckConfigValidity() {
-	if viper.GetInt("limitEntries") <= 0 {
-		logging.Error(1, "`limitEntries must be more than 0!`")
+	if viper.GetInt("limitEntries") <= -1 {
+		logging.Error(1, "`limitEntries must not be negative`")
 	}
 }
