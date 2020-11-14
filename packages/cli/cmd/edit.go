@@ -67,7 +67,7 @@ to pass the -c flag.`,
 			content = strings.Trim(content, "\n")
 		}
 		s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-		s.Prefix = fmt.Sprintf(" Updating %s", id)
+		s.Suffix = fmt.Sprintf(" Updating %s", id)
 		s.Start()
 		err := rest.RestClient.Set(id, title, content)
 		if err != nil {

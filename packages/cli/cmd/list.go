@@ -81,7 +81,7 @@ var listCmd = &cobra.Command{
 		// Implement get-by-id only
 		// -----------------------------------------
 		s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-		s.Prefix = " Fetching data"
+		s.Suffix = " Fetching data"
 		s.Start()
 		documents, err := rest.RestClient.GetAll()
 		if err != nil {
