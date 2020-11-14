@@ -18,7 +18,9 @@ package cmd
 import (
 	"fmt"
 	"strings"
+	"time"
 
+	"github.com/briandowns/spinner"
 	"github.com/spf13/cobra"
 	"lookahead.web.app/cli/internal/credential"
 	"lookahead.web.app/cli/internal/input"
@@ -64,12 +66,17 @@ to pass the -c flag.`,
 			//Trim trailing and leading newlines
 			content = strings.Trim(content, "\n")
 		}
-
+		s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
+		s.Prefix = fmt.Sprintf(" Updating %s", id)
+		s.Start()
 		err := rest.RestClient.Set(id, title, content)
 		if err != nil {
-			panic(err)
+			s.Stop()
+			logging.Error(1, err.Error())
+		} else {
+			s.Stop()
+			logging.Success("Successfully updated!!")
 		}
-		logging.Success("Successfully updated!!")
 	},
 }
 

@@ -41,6 +41,7 @@ func logFactory(emoji string, fallbackEmoji string, colorMethod formatterFunc, n
 func Error(exitCode int, str string, a ...interface{}) {
 	errorLogger := logFactory(emoji.CrossMark.String(), "!!", color.HiRedString, true)
 	errorLogger(str, a...)
+	os.Exit(exitCode)
 }
 
 var Warn = logFactory(emoji.Warning.String(), "!", color.HiYellowString, true)

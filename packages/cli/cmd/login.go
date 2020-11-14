@@ -18,7 +18,6 @@ package cmd
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"regexp"
@@ -30,6 +29,7 @@ import (
 	"github.com/spf13/cobra"
 	"lookahead.web.app/cli/internal/credential"
 	"lookahead.web.app/cli/internal/http"
+	"lookahead.web.app/cli/internal/input"
 	"lookahead.web.app/cli/internal/logging"
 )
 
@@ -43,11 +43,9 @@ var loginCmd = &cobra.Command{
 				" another account, first run `look logout` first.")
 			os.Exit(0)
 		}
-		var email string
 		loginTokens := credential.CredentialsStruct{}
 		identityKey, _ := uuid.NewRandom()
-		fmt.Print("Tell me your email: ")
-		fmt.Scanln(&email)
+		email := input.Input("Tell me your email: ")
 		if !checkEmailValidity(email) {
 			color.HiRed("Invalid Email!!!")
 			os.Exit(1)
@@ -106,8 +104,7 @@ func getLoginTokens(email string, identityKey string) credential.CredentialsStru
 	reqHeaders := map[string]string{"Content-Type": "application/json"}
 	res, err := http.Post("https://lookahead-api.vercel.app/get-login-tokens", reqHeaders, bytes.NewReader(reqBody))
 	if err != nil {
-		color.HiRed("Some error happened %s", err)
-		os.Exit(1)
+		logging.Error(1, err.Error())
 	}
 	var resJSON = credential.CredentialsStruct{}
 	json.Unmarshal([]byte(res), &resJSON)
