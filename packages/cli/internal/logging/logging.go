@@ -5,7 +5,9 @@ import (
 	"io"
 	"os"
 	"runtime"
+	"time"
 
+	"github.com/briandowns/spinner"
 	"github.com/enescakir/emoji"
 	"github.com/fatih/color"
 	"github.com/mattn/go-colorable"
@@ -48,3 +50,11 @@ var Warn = logFactory(emoji.Warning.String(), "!", color.HiYellowString, true)
 var Success = logFactory(emoji.CheckMark.String(), "!", color.HiGreenString, true)
 var Info = logFactory(emoji.Information.String(), ">", color.HiBlueString, true)
 var Ask = logFactory(emoji.QuestionMark.String(), "?", color.HiCyanString, false)
+
+//DarkSpinner Factory function that returns a spinner with gray color
+func DarkSpinner(format string, a ...interface{}) *spinner.Spinner {
+	s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
+	s.Color("fgHiBlack")
+	s.Suffix = color.HiBlackString(format, a...)
+	return s
+}

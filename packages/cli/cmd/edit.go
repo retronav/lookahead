@@ -18,9 +18,7 @@ package cmd
 import (
 	"fmt"
 	"strings"
-	"time"
 
-	"github.com/briandowns/spinner"
 	"github.com/spf13/cobra"
 	"lookahead.web.app/cli/internal/credential"
 	"lookahead.web.app/cli/internal/input"
@@ -55,19 +53,18 @@ to pass the -c flag.`,
 		id := args[0]
 		shouldEditContent, _ := cmd.Flags().GetBool("content")
 		title := ""
+		content := ""
 		title = input.Input("Enter the title to be updated: ")
 		for []byte(title)[0] == /*Newline*/ 13 {
 			title = input.Input("Enter the title to be updated: ")
 		}
 		fmt.Println("")
-		content := ""
 		if shouldEditContent {
 			content = input.MultilineInput("Enter the content to be updated")
 			//Trim trailing and leading newlines
 			content = strings.Trim(content, "\n")
 		}
-		s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-		s.Suffix = fmt.Sprintf(" Updating %s", id)
+		s := logging.DarkSpinner(" Updating %s", id)
 		s.Start()
 		err := rest.RestClient.Set(id, title, content)
 		if err != nil {

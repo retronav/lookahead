@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/briandowns/spinner"
 	"lookahead.web.app/cli/internal/credential"
+	"lookahead.web.app/cli/internal/logging"
 )
 
 type IFirebaseAuth interface {
@@ -37,8 +37,7 @@ func (a FirebaseAuth) UpdateIdToken() {
 	if creds.IdToken == "" && creds.RefreshToken == "" {
 		return
 	}
-	s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-	s.Suffix = " retrieving your account"
+	s := logging.DarkSpinner(" retrieving your account")
 	s.Start()
 	apiUrl :=
 		"https://securetoken.googleapis.com/v1/token?key=" + AuthAPIKey

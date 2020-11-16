@@ -16,9 +16,6 @@ limitations under the License.
 package cmd
 
 import (
-	"time"
-
-	"github.com/briandowns/spinner"
 	"github.com/spf13/cobra"
 	"lookahead.web.app/cli/internal/input"
 	"lookahead.web.app/cli/internal/logging"
@@ -43,8 +40,7 @@ var newCmd = &cobra.Command{
 		}
 
 		content := input.MultilineInput("Enter the new content: ")
-		s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-		s.Suffix = " Creating new todo/note"
+		s := logging.DarkSpinner(" Creating new todo/note")
 		s.Start()
 		err := rest.RestClient.Add(title, content)
 		if err != nil {

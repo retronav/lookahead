@@ -10,9 +10,8 @@ const app = admin.initializeApp({
   ),
 });
 export default async (req: NowRequest, res: NowResponse) => {
-  console.log("body", req.body);
   const firestore = app.firestore();
-  const userToken: string = (req.headers.authorization as string).split(
+  const userToken: string = (req.headers.authorization as string).splist(
     "Bearer "
   )[1];
   let decodedToken: admin.auth.DecodedIdToken;
@@ -38,7 +37,7 @@ export default async (req: NowRequest, res: NowResponse) => {
         id: joi.string(),
         data: {
           title: joi.string().optional(),
-          content: joi.string().optional(),
+          content: joi.string().allow("", null).optional(),
         },
       });
       try {
@@ -87,7 +86,7 @@ export default async (req: NowRequest, res: NowResponse) => {
       const postSchema = joi.object({
         data: {
           title: joi.string(),
-          content: joi.string().optional(),
+          content: joi.string().allow("", null).optional(),
         },
       });
       try {

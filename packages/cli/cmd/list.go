@@ -18,9 +18,7 @@ package cmd
 import (
 	"fmt"
 	"strings"
-	"time"
 
-	"github.com/briandowns/spinner"
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -80,14 +78,14 @@ var listCmd = &cobra.Command{
 		// -----------------------------------------
 		// Implement get-by-id only
 		// -----------------------------------------
-		s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
-		s.Suffix = " Fetching data"
+		s := logging.DarkSpinner(" Fetching data")
 		s.Start()
 		documents, err := rest.RestClient.GetAll()
 		if err != nil {
 			s.Stop()
 			logging.Error(1, err.Error())
 		}
+		s.Stop()
 		for i, todo := range documents {
 			if entriesLimit > 0 && i >= entriesLimit {
 				logging.Warn(
