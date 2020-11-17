@@ -1,7 +1,13 @@
 .PHONY: dev build clean
 .DEFAULT_GOAL := dev
+ifeq ($(OS),Windows_NT)
+	DEV_EXE_NAME += ./build/look.exe
+else
+	DEV_EXE_NAME += ./build/look
+endif
+
 dev:
-	go build -ldflags "-s -w" -o ./build/look.exe ./main.go
+	go build -ldflags "-s -w" -o $(DEV_EXE_NAME) ./main.go
 test:
 	go build -ldflags "-s -w -X 'lookahead.web.app/cli/internal/version.Version=Test'" -o ./build/look.exe ./main.go
 build:
