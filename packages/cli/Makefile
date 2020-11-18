@@ -8,6 +8,8 @@ endif
 
 dev:
 	go build -ldflags "-s -w" -o $(DEV_EXE_NAME) ./main.go
+install:
+	cp $(DEV_EXE_NAME) ${GOPATH}/bin
 test:
 	go build -ldflags "-s -w -X 'lookahead.web.app/cli/internal/version.Version=Test'" -o ./build/look.exe ./main.go
 build:
