@@ -13,13 +13,20 @@
     "ui": {
       "enabled": true,
       "port": 4000
+    },
+    "auth": {
+      "port": 9099
     }
   },
   "hosting": [
     {
       "target": "prod",
       "public": "packages/web/out",
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
       "headers": [
         {
           "source": "sw.js",
@@ -41,7 +48,11 @@
     {
       "target": "dev",
       "public": "packages/web/out",
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
       "headers": [
         {
           "source": "sw.js",
