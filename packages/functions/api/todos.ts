@@ -11,7 +11,7 @@ const app = admin.initializeApp({
 });
 export default async (req: NowRequest, res: NowResponse) => {
   const firestore = app.firestore();
-  const userToken: string = (req.headers.authorization as string).splist(
+  const userToken: string = (req.headers.authorization as string).split(
     "Bearer "
   )[1];
   let decodedToken: admin.auth.DecodedIdToken;
