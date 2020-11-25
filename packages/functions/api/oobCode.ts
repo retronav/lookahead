@@ -17,7 +17,7 @@ interface signInWithEmailLinkCodeResponse {
 }
 
 const emailLinkSigninView = fs.readFileSync(
-  path.join(__dirname, "..", "views", "index.html"),
+  path.join(__dirname, "..", "views", "email-link-signin", "index.html"),
   "utf-8"
 );
 const oobCodes: TempStore = {};
