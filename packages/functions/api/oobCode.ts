@@ -1,5 +1,8 @@
 import { NowRequest, NowResponse } from "@vercel/node";
 import axios, { AxiosResponse } from "axios";
+import * as fs from "fs";
+import * as path from "path";
+
 interface TempStore {
   [i: string]: string;
 }
@@ -12,6 +15,11 @@ interface signInWithEmailLinkCodeResponse {
   localId: string;
   refreshToken: string;
 }
+
+const emailLinkSigninView = fs.readFileSync(
+  path.join(__dirname, "..", "views", "index.html"),
+  "utf-8"
+);
 const oobCodes: TempStore = {};
 const identityKeys: TempStore = {};
 export default async (req: NowRequest, res: NowResponse) => {
@@ -38,7 +46,7 @@ export default async (req: NowRequest, res: NowResponse) => {
     const email = urlParams.get("em");
     const oobCode = urlParams.get("oobCode");
     oobCodes[email] = oobCode || "";
-    res.status(200).send({ ok: true });
+    res.status(200).send(emailLinkSigninView);
   }
   if (req.method === "POST" && req.url.includes("/get-login-tokens")) {
     () => {
