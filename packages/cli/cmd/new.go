@@ -33,13 +33,26 @@ var newCmd = &cobra.Command{
 	'look new -t "YOUR TITLE" -c "YOUR CONTENT HERE"'.
 	The method of creating todos using 
 	command line flags don't support multiline content.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		title := input.Input("Enter the new title: ")
-		for []byte(title)[0] == /*Newline*/ 13 {
-			title = input.Input("Enter the new title: ")
+	PreRun: func(cmd *cobra.Command, args []string) {
+		title, _ := cmd.Flags().GetString("title")
+		content, _ := cmd.Flags().GetString("content")
+		if title == "" && content != "" {
+			logging.Error(1, "Title must be present to supply content. To add a title,"+
+				" run the interactive mode by running `look new`"+
+				" or supply by arguments like `look new -t \"Title\" -c \"Content\"`")
 		}
-
-		content := input.MultilineInput("Enter the new content: ")
+	},
+	Run: func(cmd *cobra.Command, args []string) {
+		title, _ := cmd.Flags().GetString("title")
+		content, _ := cmd.Flags().GetString("content")
+		if title == "" {
+			title = input.Input("Enter the new title: ")
+			// Because title can't be empty
+			for []byte(title)[0] == /*Newline*/ 13 {
+				title = input.Input("Enter the new title: ")
+			}
+			content = input.MultilineInput("Enter the new content: ")
+		}
 		s := logging.DarkSpinner(" Creating new todo/note")
 		s.Start()
 		err := rest.RestClient.Add(title, content)
