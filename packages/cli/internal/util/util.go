@@ -6,11 +6,10 @@ import "net/http"
 //This method of checking can be unfunctional in some areas
 //but there seems to be no downtime.
 //
-//See https://major.io/icanhazip-com-faq/ for more info about icanhazip
 func IsOnline() bool {
-	//Make a request to icanhazip.com
+	//Make a request to the Lookahead API server
 	//We need the error only, nothing else :)
-	_, err := http.Get("https://icanhazip.com/")
+	_, err := http.Get("https://lookahead-api.vercel.app/")
 	//err = nil means online
 	if err == nil {
 		return true
