@@ -1,0 +1,26 @@
+name: Lookahead CLI
+
+on:
+  push:
+    paths: ["packages/cli/**"]
+
+defaults:
+  run:
+    working-directory: ./packages/cli
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '1.15.2'
+      - run: |
+          go version
+          go get -u ./...
+      - name: Build the CLI
+        run: |
+          FIXEDVER=1 make build
+          find ./build
