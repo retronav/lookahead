@@ -2,7 +2,7 @@ name: Lookahead CLI
 
 on:
   push:
-    paths: ["packages/cli/**"]
+    paths: ["packages/cli/**", ".github/workflows/cli.yml"]
 
 defaults:
   run:
@@ -20,8 +20,7 @@ jobs:
       - name: Install Dependencies
         run: |
           go version
-          sudo curl https://github.com/FiloSottile/age/releases/download/v1.0.0-beta2/age-v1.0.0-beta2-linux-amd64.tar.gz -o /usr/bin/age.tar.gz
-          sudo gzip -d < /usr/bin/age.tar.gz | tar xvf -
+          sudo wget -c https://github.com/FiloSottile/age/releases/download/v1.0.0-beta2/age-v1.0.0-beta2-linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/bin/
           go get -u ./...
       - name: Decrypt keys
         run : |
