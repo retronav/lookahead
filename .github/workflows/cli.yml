@@ -24,7 +24,7 @@ jobs:
       - name: Decrypt keys
         run : |
           echo $AGE_KEY > ./internal/firebase/key.txt
-          age -d -i ./internal/firebase/key.txt ./internal/firebase/keys.go.age > ./internal/firebase/keys.go
+          /usr/bin/age/age -d -i ./internal/firebase/key.txt ./internal/firebase/keys.go.age > ./internal/firebase/keys.go
         env:
           AGE_KEY: ${{ secrets.AGE_SECRET }}
       - name: Build the CLI
