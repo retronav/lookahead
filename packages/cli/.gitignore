@@ -3,3 +3,4 @@ build/
 
 #Firebase Auth API key
 internal/firebase/keys.go
+key.txt
