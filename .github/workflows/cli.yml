@@ -26,7 +26,7 @@ jobs:
           cd internal/firebase
           echo $AGE_KEY > key.txt
           ls -lh key.txt
-          /usr/local/age/age -d -i ./key.txt ./keys.go.age > ./keys.go
+          /usr/local/age/age -d -i key.txt keys.go.age > keys.go
         env:
           AGE_KEY: ${{ secrets.AGE_SECRET }}
       - name: Build the CLI
