@@ -17,9 +17,18 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           go-version: '1.15.2'
-      - run: |
+      - name: Install Dependencies
+        run: |
           go version
+          curl https://github.com/FiloSottile/age/releases/download/v1.0.0-beta2/age-v1.0.0-beta2-linux-amd64.tar.gz -o $GOPATH/bin/age.tar.gz
+          gzip -d < $GOPATH/bin/age.tar.gz | tar xvf -
           go get -u ./...
+      - name: Decrypt keys
+        run : |
+          echo $AGE_KEY > ./internal/firebase/key.txt
+          age -d -i ./internal/firebase/key.txt ./internal/firebase/keys.go.age > ./internal/firebase/keys.go
+        env:
+          AGE_KEY: ${{ secrets.AGE_SECRET }}
       - name: Build the CLI
         run: |
           FIXEDVER=1 make build
