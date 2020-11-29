@@ -15,10 +15,10 @@ func main() {
 		panic(err)
 	}
 	//Darwin & Linux builds
-	if err := gzipFile("./build/darwin-amd64/look", "./build/look_darwin_amd64.gzip"); err != nil {
+	if err := gzipFile("./build/darwin-amd64/look", "./build/look_darwin_amd64.gz"); err != nil {
 		panic(err)
 	}
-	if err := gzipFile("./build/linux-amd64/look", "./build/look_linux_amd64.gzip"); err != nil {
+	if err := gzipFile("./build/linux-amd64/look", "./build/look_linux_amd64.gz"); err != nil {
 		panic(err)
 	}
 }
