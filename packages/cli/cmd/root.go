@@ -16,13 +16,12 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
+	"lookahead.web.app/cli/internal/constants"
 	"lookahead.web.app/cli/internal/version"
 
-	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
 	"lookahead.web.app/cli/internal/config"
 )
@@ -60,11 +59,7 @@ func initConfig() {
 		viper.SetConfigFile(cfgFile)
 	} else {
 		// Find home directory.
-		home, err := homedir.Dir()
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+		home := constants.CONFIG_PATH
 
 		// Search config in home directory with name ".lookahead" (without extension).
 		viper.AddConfigPath(home)

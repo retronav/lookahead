@@ -5,6 +5,8 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+
+	"lookahead.web.app/cli/internal/constants"
 )
 
 var writeCredentialsFilePermissions os.FileMode = 0666
@@ -23,8 +25,7 @@ type CredentialsStruct struct {
 
 //GetCredentialsLocation Return the path of the credentials file
 func GetCredentialsLocation() string {
-	userDir, _ := os.UserHomeDir()
-	return path.Join(userDir, ".lookaheadrc")
+	return path.Join(constants.CONFIG_PATH, ".lookaheadrc")
 }
 
 //ReadCredentials Get the credentials and return them
