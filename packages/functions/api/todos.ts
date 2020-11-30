@@ -11,6 +11,12 @@ const app = admin.initializeApp({
 });
 export default async (req: NowRequest, res: NowResponse) => {
   const firestore = app.firestore();
+  if (
+    !req.headers.authorization ||
+    !req.headers.authorization.startsWith("Bearer")
+  ) {
+    res.status(401).send({ message: "Unauthorized" });
+  }
   const userToken: string = (req.headers.authorization as string).split(
     "Bearer "
   )[1];
