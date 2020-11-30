@@ -37,4 +37,6 @@ jobs:
           vercelProjectId: ${{ secrets.VERCEL_PROJECT_ID }}
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           deployProduction: true
-          buildSource: "./packages/functions"
+          deploySource: "./packages/functions"
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
