@@ -23,6 +23,11 @@ export default async (req: NowRequest, res: NowResponse) => {
   let decodedToken: admin.auth.DecodedIdToken;
   try {
     decodedToken = await app.auth().verifyIdToken(userToken);
+    if (decodedToken.uid) {
+      console.debug("decoded token present");
+    } else {
+      console.debug("decoded token not present");
+    }
   } catch (e) {
     res.status(403).send({ message: "Permission Denied" });
   }

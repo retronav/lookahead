@@ -5,5 +5,8 @@
     { "src": "/get-login-tokens", "dest": "/api/oobCode.ts" },
     { "src": "/send-email-link", "dest": "/api/oobCode.ts" },
     { "src": "/todos", "dest": "/api/todos.ts" }
-  ]
+  ],
+  "github": {
+    "silent": true
+  }
 }
