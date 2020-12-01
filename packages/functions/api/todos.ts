@@ -20,13 +20,16 @@ export default async (req: NowRequest, res: NowResponse) => {
   const userToken: string = (req.headers.authorization as string).split(
     "Bearer "
   )[1];
-  let decodedToken: admin.auth.DecodedIdToken;
-  try {
-    decodedToken = await app.auth().verifyIdToken(userToken);
-  } catch (e) {
-    res.status(403).send({ message: "Permission Denied" });
-  }
-  if (decodedToken.uid) {
+  app
+    .auth()
+    .verifyIdToken(userToken)
+    .catch((_) => {
+      res.status(403).send({ message: "Permission Denied" });
+    });
+  const decodedToken: admin.auth.DecodedIdToken = await app
+    .auth()
+    .verifyIdToken(userToken);
+  if (decodedToken) {
     console.log("decoded token present");
   } else {
     console.log("decoded token not present");
