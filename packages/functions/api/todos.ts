@@ -88,7 +88,7 @@ export default async (req: NowRequest, res: NowResponse) => {
             {
               ...req.body.data,
               last_edited: JSON.stringify(
-                getDate(new Date(req.body.timestamp))
+                getDate(new Date(req.body.timestamp * 1000))
               ),
             },
             { merge: true }
@@ -144,7 +144,9 @@ export default async (req: NowRequest, res: NowResponse) => {
       try {
         await firestore.collection(`users/${decodedToken.uid}/todos`).add({
           ...req.body.data,
-          last_edited: JSON.stringify(getDate(new Date(req.body.timestamp))),
+          last_edited: JSON.stringify(
+            getDate(new Date(req.body.timestamp * 1000))
+          ),
         });
         res.status(200).send({ message: "OK" });
       } catch (e) {
