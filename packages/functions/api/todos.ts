@@ -36,14 +36,31 @@ export default async (req: NowRequest, res: NowResponse) => {
   }
   switch (req.method) {
     case "GET":
-      const todos = [];
-      const todoData = await firestore
-        .collection(`users/${decodedToken.uid}/todos`)
-        .get();
-      todoData.docs.forEach((todo) =>
-        todos.push({ id: todo.id, data: todo.data() })
-      );
-      res.send(todos);
+      const id = req.query.id;
+      // If id specified in query, send single document
+      if (id) {
+        const todoData = await firestore
+          .collection(`users/${decodedToken.uid}/todos`)
+          .where("__name__", "==", id)
+          .limit(1)
+          .get();
+        if (todoData.empty) {
+          res.status(404).send({ message: "Not Found" });
+          return;
+        }
+        const todo = todoData.docs[0];
+        res.send({ id: id, data: todo.data() });
+      } else {
+        // Else send all documents
+        const todos = [];
+        const todoData = await firestore
+          .collection(`users/${decodedToken.uid}/todos`)
+          .get();
+        todoData.docs.forEach((todo) =>
+          todos.push({ id: todo.id, data: todo.data() })
+        );
+        res.send(todos);
+      }
       break;
 
     case "PATCH":
