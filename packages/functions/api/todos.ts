@@ -73,7 +73,7 @@ export default async (req: NowRequest, res: NowResponse) => {
         //Because we need exact time from the user's machine,
         //we need to get a timestamp to remove collisions
         //in sync process
-        timestamp: joi.number(),
+        last_edited: joi.string(),
       });
       try {
         await patchSchema.validateAsync(req.body);
@@ -87,9 +87,7 @@ export default async (req: NowRequest, res: NowResponse) => {
           .set(
             {
               ...req.body.data,
-              last_edited: JSON.stringify(
-                getDate(new Date(req.body.timestamp * 1000))
-              ),
+              last_edited: req.body.last_edited,
             },
             { merge: true }
           );
@@ -130,7 +128,7 @@ export default async (req: NowRequest, res: NowResponse) => {
           //Because we need exact time from the user's machine,
           //we need to get a timestamp to remove collisions
           //in sync process
-          timestamp: joi.number(),
+          last_edited: joi.string(),
         },
       });
       try {
@@ -144,9 +142,6 @@ export default async (req: NowRequest, res: NowResponse) => {
       try {
         await firestore.collection(`users/${decodedToken.uid}/todos`).add({
           ...req.body.data,
-          last_edited: JSON.stringify(
-            getDate(new Date(req.body.timestamp * 1000))
-          ),
         });
         res.status(200).send({ message: "OK" });
       } catch (e) {
