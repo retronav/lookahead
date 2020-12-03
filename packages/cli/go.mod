@@ -9,6 +9,7 @@ require (
 	github.com/google/uuid v1.1.2
 	github.com/mattn/go-colorable v0.1.8
 	github.com/mattn/go-isatty v0.0.12
+	github.com/mitchellh/mapstructure v1.1.2
 	github.com/spf13/cobra v1.1.1
 	github.com/spf13/viper v1.7.1
 	github.com/tidwall/gjson v1.6.3

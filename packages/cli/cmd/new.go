@@ -19,7 +19,7 @@ import (
 	"github.com/spf13/cobra"
 	"lookahead.web.app/cli/internal/input"
 	"lookahead.web.app/cli/internal/logging"
-	"lookahead.web.app/cli/internal/rest"
+	"lookahead.web.app/cli/internal/store"
 )
 
 // newCmd represents the new command
@@ -55,7 +55,7 @@ var newCmd = &cobra.Command{
 		}
 		s := logging.DarkSpinner(" Creating new todo/note")
 		s.Start()
-		err := rest.RestClient.Add(title, content)
+		err := store.Store.Append(title, content)
 		if err != nil {
 			s.Stop()
 			logging.Error(1, err.Error())

@@ -20,28 +20,31 @@ func getAPIEndpoint() string {
 }
 
 type restClientStruct struct {
-	idToken    string
+	//IdToken The token used for making transactions with the database
+	IdToken    string
 	httpClient http.Client
 }
 
 type restClientMethods interface {
-	Add()
+	Add(title string, content string, last_edited string) error
 	Delete()
 	GetAll() ([]map[string]interface{}, error)
-	Set()
+	Get(id string) (map[string]interface{}, error)
+	Set(id string, title string, content string, last_edited string) error
 }
 
-func (c restClientStruct) Add(title string, content string) error {
+func (c restClientStruct) Add(title string, content string, last_edited string) error {
 	reqBodyData := map[string]string{
-		"title":   title,
-		"content": content,
+		"title":       title,
+		"content":     content,
+		"last_edited": last_edited,
 	}
 	reqBody := map[string]interface{}{
 		"data": reqBodyData,
 	}
 	reqBodyJSON, _ := json.Marshal(reqBody)
 	req, _ := http.NewRequest(http.MethodPost, getAPIEndpoint(), bytes.NewBuffer(reqBodyJSON))
-	req.Header.Add("Authorization", "Bearer "+c.idToken)
+	req.Header.Add("Authorization", "Bearer "+c.IdToken)
 	req.Header.Add("Content-Type", "application/json")
 
 	res, err := c.httpClient.Do(req)
@@ -58,11 +61,33 @@ func (c restClientStruct) Add(title string, content string) error {
 }
 func (c restClientStruct) Delete() {}
 
+func (c restClientStruct) Get(id string) (map[string]interface{}, error) {
+	req, _ := http.NewRequest(http.MethodGet, getAPIEndpoint(), nil)
+	req.Header.Add("Authorization", "Bearer "+c.IdToken)
+	req.URL.Query().Add("id", id)
+
+	res, err := c.httpClient.Do(req)
+	if err == nil {
+		todo := make(map[string]interface{})
+		todoBytes, _ := ioutil.ReadAll(res.Body)
+		todoParsed := gjson.ParseBytes(todoBytes)
+
+		todo["id"] = todoParsed.Get("id")
+		todo["title"] = todoParsed.Get("data.title").String()
+		todo["content"] = todoParsed.Get("data.content").String()
+		todo["last_edited"] = todoParsed.Get("data.last_edited").String()
+
+		return todo, nil
+	} else {
+		return nil, err
+	}
+}
+
 // GetAll fetch all the user todos from the serverless API.
 // To identify the user, the user-authenticated OAuth2 token or a Firebase ID token.
 func (c restClientStruct) GetAll() ([]map[string]interface{}, error) {
 	req, _ := http.NewRequest(http.MethodGet, getAPIEndpoint(), nil)
-	req.Header.Add("Authorization", "Bearer "+c.idToken)
+	req.Header.Add("Authorization", "Bearer "+c.IdToken)
 
 	res, err := c.httpClient.Do(req)
 	if err == nil {
@@ -84,18 +109,19 @@ func (c restClientStruct) GetAll() ([]map[string]interface{}, error) {
 		return nil, err
 	}
 }
-func (c restClientStruct) Set(id string, title string, content string) error {
+func (c restClientStruct) Set(id string, title string, content string, last_edited string) error {
 	reqBodyData := map[string]string{
 		"title":   title,
 		"content": content,
 	}
 	reqBody := map[string]interface{}{
-		"id":   id,
-		"data": reqBodyData,
+		"id":          id,
+		"data":        reqBodyData,
+		"last_edited": last_edited,
 	}
 	reqBodyJSON, _ := json.Marshal(reqBody)
 	req, _ := http.NewRequest(http.MethodPatch, getAPIEndpoint(), bytes.NewBuffer(reqBodyJSON))
-	req.Header.Add("Authorization", "Bearer "+c.idToken)
+	req.Header.Add("Authorization", "Bearer "+c.IdToken)
 	req.Header.Add("Content-Type", "application/json")
 
 	res, err := c.httpClient.Do(req)
@@ -112,5 +138,5 @@ func (c restClientStruct) Set(id string, title string, content string) error {
 }
 
 var RestClient restClientStruct = restClientStruct{
-	idToken: credential.ReadCredentials().IdToken,
+	IdToken: credential.ReadCredentials().IdToken,
 }

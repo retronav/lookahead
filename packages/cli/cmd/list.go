@@ -25,7 +25,7 @@ import (
 	"github.com/tidwall/gjson"
 	"lookahead.web.app/cli/internal/credential"
 	"lookahead.web.app/cli/internal/logging"
-	"lookahead.web.app/cli/internal/rest"
+	"lookahead.web.app/cli/internal/store"
 	"lookahead.web.app/cli/internal/util"
 )
 
@@ -45,13 +45,13 @@ func getLastPathOfDocId(docId string) string {
 	return arr[len(arr)-1]
 }
 
-func printWholeTodo(todo map[string]interface{}) {
-	fmt.Println("Todo id:", getLastPathOfDocId(todo["id"].(string)))
-	color.HiCyan(fmt.Sprint(todo["title"]))
-	if !checkStringEmptyOrOnlySpaces(fmt.Sprint(todo["content"])) {
-		fmt.Println(todo["content"])
+func printWholeTodo(todo store.DataSchema) {
+	fmt.Println("Todo id:", getLastPathOfDocId(todo.Id))
+	color.HiCyan(todo.Title)
+	if !checkStringEmptyOrOnlySpaces(todo.Content) {
+		fmt.Println(todo.Content)
 	}
-	fmt.Println(lastEditedStringFormat(fmt.Sprint(todo["last_edited"])))
+	fmt.Println(lastEditedStringFormat(todo.LastEdited))
 	fmt.Println()
 }
 
@@ -80,7 +80,7 @@ var listCmd = &cobra.Command{
 		// -----------------------------------------
 		s := logging.DarkSpinner(" Fetching data")
 		s.Start()
-		documents, err := rest.RestClient.GetAll()
+		documents, err := store.Store.GetAll()
 		if err != nil {
 			s.Stop()
 			logging.Error(1, err.Error())

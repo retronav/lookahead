@@ -7,6 +7,7 @@ import (
 	"path"
 
 	"lookahead.web.app/cli/internal/constants"
+	"lookahead.web.app/cli/internal/logging"
 )
 
 var writeCredentialsFilePermissions os.FileMode = 0666
@@ -21,6 +22,9 @@ type CredentialsStruct struct {
 	LocalId string `json:"localId"`
 	//SignInTimestamp Epoch timestamp captured when the user signed in
 	SignInTimestamp int64 `json:"signInTimestamp"`
+	//StoreSyncTimestamp Epoch timestamp captured when the local store
+	//is synced with the cloud database
+	StoreSyncTimestamp int64 `json:"storeSyncTimestamp"`
 }
 
 //GetCredentialsLocation Return the path of the credentials file
@@ -32,7 +36,10 @@ func GetCredentialsLocation() string {
 func ReadCredentials() CredentialsStruct {
 	credsLoc := GetCredentialsLocation()
 	if _, err := os.Stat(credsLoc); err == nil {
-		content, _ := ioutil.ReadFile(credsLoc)
+		content, err := ioutil.ReadFile(credsLoc)
+		if err != nil {
+			logging.Error(1, "Couldn't read credentials file. Please try again")
+		}
 		contentStruct := CredentialsStruct{}
 		json.Unmarshal(content, &contentStruct)
 		return contentStruct

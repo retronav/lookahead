@@ -18,13 +18,14 @@ package main
 import (
 	"lookahead.web.app/cli/cmd"
 	"lookahead.web.app/cli/internal/firebase"
+	"lookahead.web.app/cli/internal/store"
 )
 
 func main() {
 	//Update ID token, if present
 	firebase.Auth.UpdateIdToken()
-
+	//Sync local store
+	store.Store.Refresh()
 	//Run the CLI!!
 	cmd.Execute()
 }
- 

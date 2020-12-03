@@ -23,7 +23,7 @@ import (
 	"lookahead.web.app/cli/internal/credential"
 	"lookahead.web.app/cli/internal/input"
 	"lookahead.web.app/cli/internal/logging"
-	"lookahead.web.app/cli/internal/rest"
+	"lookahead.web.app/cli/internal/store"
 	"lookahead.web.app/cli/internal/util"
 )
 
@@ -66,7 +66,7 @@ to pass the -c flag.`,
 		}
 		s := logging.DarkSpinner(" Updating %s", id)
 		s.Start()
-		err := rest.RestClient.Set(id, title, content)
+		err := store.Store.Update(id, title, content)
 		if err != nil {
 			s.Stop()
 			logging.Error(1, err.Error())
