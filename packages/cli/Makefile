@@ -7,10 +7,10 @@ else
 	DEV_EXE_NAME += ./build/look
 endif
 
-FIXEDVERSION := FixedVersion
+DEV_VER := $$(git rev-parse --short HEAD)
 
 build/single:
-	go build -ldflags "-s -w -X 'lookahead.web.app/cli/internal/version.Version=$(FIXEDVERSION)'" -o $(DEV_EXE_NAME) ./main.go
+	go build -ldflags "-s -w -X 'lookahead.web.app/cli/internal/version.Version=$(DEV_VER)'" -o $(DEV_EXE_NAME) ./main.go
 install:
 	cp $(DEV_EXE_NAME) ${GOPATH}/bin
 build:
