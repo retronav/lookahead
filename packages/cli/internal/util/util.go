@@ -5,7 +5,11 @@ import (
 	"fmt"
 	"math/rand"
 	"net/http"
+	"strconv"
+	"strings"
 	"time"
+
+	"github.com/tidwall/gjson"
 )
 
 //IsOnline Check whether user is connected to the Internet or not.
@@ -50,6 +54,30 @@ func MakeCurrDate() string {
 	}
 	toReturn, _ := json.Marshal(dateMap)
 	return string(toReturn)
+}
+
+//DateJSONToTimestamp converts the output given by MakeCurrDate()
+//into a Unix timestamp
+func DateJSONToTimestamp(dateJSON string) int64 {
+	months := []string{"Jan", "Feb", "Mar", "Apr", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"}
+	dateParsed := gjson.Parse(dateJSON)
+	fullDate := dateParsed.Get("date").Str
+	fullTime := dateParsed.Get("time").Str
+	dateParts := strings.SplitN(fullDate, " ", 3)
+	dateStr, monthStr, yearStr := dateParts[0], dateParts[1], dateParts[2]
+	monthStr = monthStr[:3]
+	month := 0
+	for i, n := range months {
+		if monthStr == n {
+			month = i
+		}
+	}
+	year, _ := strconv.Atoi(yearStr)
+	date, _ := strconv.Atoi(dateStr)
+	hour, _ := strconv.Atoi(fullTime[:2])
+	min, _ := strconv.Atoi(fullTime[3:5])
+	timestamp := time.Date(year, time.Month(month), date, hour, min, 0, 0, time.Local)
+	return timestamp.Unix()
 }
 
 //GenerateDocID Generate random id for Firestore document.

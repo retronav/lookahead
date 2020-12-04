@@ -28,6 +28,7 @@ type DataSchema struct {
 	Content    string `json:"content" mapstructure:"content"`
 	Id         string `json:"id" mapstructure:"id"`
 	LastEdited string `json:"last_edited" mapstructure:"last_edited"`
+	New        bool   `json:"new,omitempty"`
 }
 
 //rawDataSchema copy of DataSchema, but just the raw data
@@ -57,6 +58,16 @@ func (s storeStruct) Append(title string, content string) error {
 		Content:    content,
 		LastEdited: util.MakeCurrDate(),
 	}
+	if util.IsOnline() {
+		err := rest.RestClient.Set(data.Id, title, content, data.LastEdited)
+		if err != nil {
+			return err
+		}
+	} else {
+		data.New = true
+		logging.Warn("Couldn't sync to the online store" +
+			" because you seem to be offline.")
+	}
 	existingJSON = append(existingJSON, data)
 	toWrite, err := json.Marshal(existingJSON)
 	if err != nil {
@@ -65,15 +76,6 @@ func (s storeStruct) Append(title string, content string) error {
 	err = ioutil.WriteFile(s.storeLoc, []byte(toWrite), s.filePermissions)
 	if err != nil {
 		return errors.New("Couldn't write data to local data store. Please try again")
-	}
-	if util.IsOnline() {
-		err = rest.RestClient.Set(data.Id, title, content, data.LastEdited)
-		if err != nil {
-			return err
-		}
-	} else {
-		logging.Warn("Couldn't sync to the online store" +
-			" because you seem to be offline.")
 	}
 	return nil
 }
@@ -123,7 +125,16 @@ func (s storeStruct) Refresh() {
 					//Look for mutated items and update them
 					(item.Title != lItem.Title || item.Content != lItem.Content) {
 					newItem = false
-					localJSON[i] = item
+					lts := util.DateJSONToTimestamp(lItem.LastEdited)
+					ts := util.DateJSONToTimestamp(item.LastEdited)
+					if lts > ts {
+						//This item was edited in the CLI,
+						//But the user was offline. Update it
+						rest.RestClient.Set(lItem.Id, lItem.Title, lItem.Content, lItem.LastEdited)
+					} else {
+						//This item got updated on the web app. Update it
+						localJSON[i] = item
+					}
 					continue outer
 				}
 			}
@@ -134,6 +145,16 @@ func (s storeStruct) Refresh() {
 			}
 		}
 		for i, lItem := range localJSON {
+			if lItem.New == true {
+				//This item was added from the CLI but the user was offline.
+				//Update it
+				if util.IsOnline() {
+					lItem.New = false
+					rest.RestClient.Set(lItem.Id, lItem.Title, lItem.Content, lItem.LastEdited)
+				} else {
+					continue
+				}
+			}
 			//A flag to confirm that this a deleted item
 			deletedItem := true
 			for _, item := range dbJSON {
