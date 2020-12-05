@@ -38,12 +38,12 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: look-linux-amd64
-          path: ${{ github.workspace }}build/look_linux_amd64.gz
+          path: ${{ github.workspace }}/packages/cli/build/look_linux_amd64.gz
       - uses: actions/upload-artifact@v2
         with:
           name: look-darwin-amd64
-          path: ${{ github.workspace }}build/look_darwin_amd64.gz
+          path: ${{ github.workspace }}/packages/cli/build/look_darwin_amd64.gz
       - uses: actions/upload-artifact@v2
         with:
           name: look-win32-amd64
-          path: ${{ github.workspace }}build/look_win32_amd64.zip
+          path: ${{ github.workspace }}/packages/cli/build/look_win32_amd64.zip
