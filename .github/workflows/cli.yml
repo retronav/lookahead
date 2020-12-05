@@ -20,7 +20,7 @@ jobs:
       - name: Install Dependencies
         run: |
           go version
-          go mod download -x
+          go mod download
           sudo wget –quiet -c https://github.com/FiloSottile/age/releases/download/v1.0.0-beta2/age-v1.0.0-beta2-linux-amd64.tar.gz -O - | sudo tar -xz -C /usr/local
       - name: Decrypt keys
         run : |
@@ -35,3 +35,15 @@ jobs:
           FIXEDVER=1 make build
           make archive
           find ./build
+      - uses: actions/upload-artifact@v2
+        with:
+          name: look-linux-amd64
+          path: ./build/look_linux_amd64.gz
+      - uses: actions/upload-artifact@v2
+        with:
+          name: look-darwin-amd64
+          path: ./build/look_darwin_amd64.gz
+      - uses: actions/upload-artifact@v2
+        with:
+          name: look-win32-amd64
+          path: ./build/look_win32_amd64.zip
