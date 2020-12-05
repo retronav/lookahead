@@ -20,6 +20,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"lookahead.web.app/cli/internal/constants"
+	"lookahead.web.app/cli/internal/store"
 	"lookahead.web.app/cli/internal/version"
 
 	"github.com/spf13/viper"
@@ -50,6 +51,16 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.lookahead.yaml)")
 	//Initialize default config
 	viper.SetDefault("numberOfEntries", 5)
+
+	shouldUpdateStore := true
+	//If the command is `sync` skip sync
+	if len(os.Args) >= 2 && os.Args[1] == "sync" {
+		shouldUpdateStore = false
+	}
+	if shouldUpdateStore {
+		//Sync the store
+		store.Store.Sync(false)
+	}
 }
 
 // initConfig reads in config file and ENV variables if set.
