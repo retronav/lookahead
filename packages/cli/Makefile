@@ -41,7 +41,4 @@ archive:
 clean:
 	rm -rf build/
 command:
-	ifeq ($(name),"")
-		$(error Please supply a name to generate command)
-	endif
 	cobra add $(name) -a "Pranav Karawale"
