@@ -26,7 +26,6 @@ import (
 	"lookahead.web.app/cli/internal/credential"
 	"lookahead.web.app/cli/internal/logging"
 	"lookahead.web.app/cli/internal/store"
-	"lookahead.web.app/cli/internal/util"
 )
 
 func checkStringEmptyOrOnlySpaces(str string) bool {
@@ -64,11 +63,6 @@ var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "Lists all notes and to-dos of the user",
 	Run: func(cmd *cobra.Command, args []string) {
-		//If user seems to be offline
-		if !util.IsOnline() {
-			logging.Error(1, "Offline functionality will be implemented soon."+
-				" But for now, you need to be online to run this command")
-		}
 		//If user is logged out
 		if credential.CheckIfUserLoggedIn() == false {
 			logging.Error(1, "You should be logged in to run this command!!"+
