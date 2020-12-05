@@ -38,12 +38,12 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: look-linux-amd64
-          path: ./build/look_linux_amd64.gz
+          path: build/look_linux_amd64.gz
       - uses: actions/upload-artifact@v2
         with:
           name: look-darwin-amd64
-          path: ./build/look_darwin_amd64.gz
+          path: build/look_darwin_amd64.gz
       - uses: actions/upload-artifact@v2
         with:
           name: look-win32-amd64
-          path: ./build/look_win32_amd64.zip
+          path: build/look_win32_amd64.zip
