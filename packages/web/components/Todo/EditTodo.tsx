@@ -7,7 +7,7 @@ import {
   TextField,
   Theme,
 } from "@material-ui/core";
-import { createStyles, makeStyles, withStyles } from "@material-ui/styles";
+import { createStyles, makeStyles, withStyles } from "@material-ui/core/styles";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { checkEmptyStr, getDate, LastEdited } from "../util";
@@ -20,15 +20,22 @@ interface Props {
 }
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    deleteBtn: {
-      color: theme.palette.error.main,
-      borderColor: theme.palette.error.main,
-    },
     errorHelperText: {
       color: theme.palette.error.main,
     },
   })
 );
+const RedButton = withStyles(
+  (theme: Theme) => {
+    return {
+      root: {
+        color: theme.palette.error.main + " !important",
+        border: `1px solid ${theme.palette.error.main}` + " !important",
+      },
+    };
+  },
+  { withTheme: true }
+)(Button);
 const BorderlessTitleField = withStyles({
   root: {
     "& .MuiInput-underline:after": {
@@ -98,19 +105,18 @@ const EditTodo = ({ dialogState, handleClose, firestore }: Props) => {
         vertical: "bottom",
       },
       persist: true,
+
       action: (
         <>
-          <Button
+          <RedButton
             onClick={() => {
               handleDelete();
               snackbar.closeSnackbar("delete-todo");
             }}
-            color="secondary"
-            className={classes.deleteBtn}
             variant="outlined"
           >
             Delete Todo
-          </Button>
+          </RedButton>
           <Button
             variant="outlined"
             color="secondary"
@@ -171,13 +177,9 @@ const EditTodo = ({ dialogState, handleClose, firestore }: Props) => {
         <Button onClick={handleClose} color="secondary" variant="outlined">
           Cancel
         </Button>
-        <Button
-          onClick={askForDelete}
-          className={classes.deleteBtn}
-          variant="outlined"
-        >
+        <RedButton onClick={askForDelete} variant="outlined">
           Delete Todo
-        </Button>
+        </RedButton>
       </DialogActions>
     </Dialog>
   );
