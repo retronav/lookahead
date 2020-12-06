@@ -45,6 +45,11 @@ to pass the -c flag.`,
 				" Use `look login` to login")
 		}
 		id := args[0]
+		//Check if ID really exists
+		exists := store.Store.IdExists(id)
+		if !exists {
+			logging.Error(1, "ID not found! Please check that ID again!")
+		}
 		shouldEditContent, _ := cmd.Flags().GetBool("content")
 		title := ""
 		content := ""

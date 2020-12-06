@@ -43,6 +43,7 @@ type storeInterface interface {
 	GetAll() ([]DataSchema, error)
 	Sync()
 	Update(id string, title string, content string) error
+	IdExists(id string) bool
 }
 
 //Append Append a new todo/note in the local store
@@ -85,6 +86,17 @@ func (s storeStruct) GetAll() ([]DataSchema, error) {
 		return storeJSON, nil
 	}
 	return nil, errors.New("Couldn't access local data store. Please try again")
+}
+
+func (s storeStruct) IdExists(id string) bool {
+	data, _ := s.GetAll()
+	found := false
+	for _, item := range data {
+		if item.Id == id {
+			found = true
+		}
+	}
+	return found
 }
 
 //Update Update the contents of an existing todo/note
