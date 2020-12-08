@@ -35,15 +35,20 @@ jobs:
           FIXEDVER=1 make build
           make archive
           find ./build
+      - name: Run Tests
+        run: go test -v ./...
       - uses: actions/upload-artifact@v2
+        if: always()
         with:
           name: look-cli-linux
           path: ${{ github.workspace }}/packages/cli/build/linux-amd64/look
       - uses: actions/upload-artifact@v2
+        if: always()
         with:
           name: look-cli-macos
           path: ${{ github.workspace }}/packages/cli/build/darwin-amd64/look
       - uses: actions/upload-artifact@v2
+        if: always()
         with:
           name: look-cli-windows
           path: ${{ github.workspace }}/packages/cli/build/win32-amd64/look.exe

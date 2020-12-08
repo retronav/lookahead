@@ -56,7 +56,7 @@ func DateJSONToTimestamp(dateJSON string) int64 {
 	month := 0
 	for i, n := range months {
 		if monthStr == n {
-			month = i
+			month = i + 1
 		}
 	}
 	year, _ := strconv.Atoi(yearStr)
