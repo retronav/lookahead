@@ -3,6 +3,7 @@ package util
 import (
 	"math/rand"
 	"net/http"
+	"time"
 )
 
 //IsOnline Check whether user is connected to the Internet or not.
@@ -27,6 +28,8 @@ func IsOnline() bool {
 //JS SDK
 //(see https://github.com/firebase/firebase-js-sdk/blob/73a586c92afe3f39a844b2be86086fddb6877bb7/packages/firestore/src/util/misc.ts#L36)
 func GenerateDocID() string {
+	//Seed the generator
+	rand.Seed(time.Now().UnixNano())
 	//Alphanumeric characters
 	const chars string = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 	autoId := ""

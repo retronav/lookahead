@@ -49,8 +49,12 @@ type storeInterface interface {
 //Append Append a new todo/note in the local store
 func (s storeStruct) Append(title string, content string) error {
 	existingJSON, _ := s.GetAll()
+	newId := util.GenerateDocID()
+	if s.IdExists(newId) {
+		newId = util.GenerateDocID()
+	}
 	data := DataSchema{
-		Id:         util.GenerateDocID(),
+		Id:         newId,
 		Title:      title,
 		Content:    content,
 		LastEdited: util.MakeCurrDate(),
