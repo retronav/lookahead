@@ -37,6 +37,8 @@ jobs:
           find ./build
       - name: Run Tests
         run: go test -v ./...
+      - name: Run benchmarks
+        run: go test -bench . ./...
       - uses: actions/upload-artifact@v2
         if: always()
         with:
