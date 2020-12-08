@@ -91,10 +91,14 @@ func (s storeStruct) Sync(force bool) {
 			}
 			//If the item is deleted
 			if deletedItem {
-				//Remove the item and push the remaining ones ahead
-				//This seems to be computationally expensive, so
-				//TODO(obnoxiousnerd): find alternatives to this
-				localJSON = append(localJSON[:i], localJSON[i+1:]...)
+				if len(localJSON) > (i + 1) {
+					//Remove the item and push the remaining ones ahead
+					//This seems to be computationally expensive, so
+					//TODO(obnoxiousnerd): find alternatives to this
+					localJSON = append(localJSON[:i], localJSON[i+1:]...)
+				} else {
+					localJSON = localJSON[:len(localJSON)-1]
+				}
 			}
 		}
 		toWrite, _ := json.Marshal(localJSON)
