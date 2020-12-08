@@ -8,7 +8,6 @@ import (
 	"path"
 
 	"lookahead.web.app/cli/internal/constants"
-	"lookahead.web.app/cli/internal/logging"
 	"lookahead.web.app/cli/internal/rest"
 	"lookahead.web.app/cli/internal/util"
 )
@@ -39,15 +38,17 @@ type storeStruct struct {
 }
 
 type storeInterface interface {
-	Append(id string, title string, content string) error
+	Append(id string, title string, content string) (bool, error)
+	Get(id string) (DataSchema, error)
 	GetAll() ([]DataSchema, error)
 	Sync()
-	Update(id string, title string, content string) error
+	Update(id string, title string, content string) (bool, error)
 	IdExists(id string) bool
 }
 
 //Append Append a new todo/note in the local store
-func (s storeStruct) Append(title string, content string) error {
+func (s storeStruct) Append(title string, content string) (bool, error) {
+	isOffline := false
 	existingJSON, _ := s.GetAll()
 	newId := util.GenerateDocID()
 	if s.IdExists(newId) {
@@ -62,23 +63,37 @@ func (s storeStruct) Append(title string, content string) error {
 	if util.IsOnline() {
 		err := rest.RestClient.Set(data.Id, title, content, data.LastEdited)
 		if err != nil {
-			return err
+			return isOffline, err
 		}
 	} else {
 		data.New = true
-		logging.Warn("Couldn't sync to the online store" +
-			" because you seem to be offline.")
+		isOffline = true
 	}
 	existingJSON = append(existingJSON, data)
 	toWrite, err := json.Marshal(existingJSON)
 	if err != nil {
-		return errors.New("There was an error while adding values to the store. Please try again")
+		return isOffline, errors.New("There was an error while adding values to the store. Please try again")
 	}
 	err = ioutil.WriteFile(s.storeLoc, []byte(toWrite), s.filePermissions)
 	if err != nil {
-		return errors.New("Couldn't write data to local data store. Please try again")
+		return isOffline, errors.New("Couldn't write data to local data store. Please try again")
 	}
-	return nil
+	return isOffline, nil
+}
+
+func (s storeStruct) Get(id string) (DataSchema, error) {
+	if s.IdExists(id) {
+		all, err := s.GetAll()
+		if err != nil {
+			return DataSchema{}, err
+		}
+		for _, todo := range all {
+			if todo.Id == id {
+				return todo, nil
+			}
+		}
+	}
+	return DataSchema{}, errors.New("ID not found")
 }
 
 //GetAll Gets all values from the local store
@@ -104,7 +119,8 @@ func (s storeStruct) IdExists(id string) bool {
 }
 
 //Update Update the contents of an existing todo/note
-func (s storeStruct) Update(id string, title string, content string) error {
+func (s storeStruct) Update(id string, title string, content string) (bool, error) {
+	isOffline := false
 	existingJSON, _ := s.GetAll()
 	data := DataSchema{
 		Id:         id,
@@ -121,26 +137,25 @@ func (s storeStruct) Update(id string, title string, content string) error {
 		}
 	}
 	if !mutated {
-		return errors.New("given id does not exist")
+		return isOffline, errors.New("given id does not exist")
 	} else {
 		toWrite, err := json.Marshal(existingJSON)
 		if err != nil {
-			return errors.New("There was an error while adding values to the store. Please try again")
+			return isOffline, errors.New("There was an error while adding values to the store. Please try again")
 		}
 		err = ioutil.WriteFile(s.storeLoc, []byte(toWrite), s.filePermissions)
 		if err != nil {
-			return errors.New("Couldn't write data to local data store. Please try again")
+			return isOffline, errors.New("Couldn't write data to local data store. Please try again")
 		}
 		if util.IsOnline() {
 			err = rest.RestClient.Set(id, title, content, data.LastEdited)
 			if err != nil {
-				return err
+				return isOffline, err
 			}
 		} else {
-			logging.Warn("Couldn't sync to the online store" +
-				" because you seem to be offline.")
+			isOffline = true
 		}
-		return nil
+		return isOffline, nil
 	}
 }
 
