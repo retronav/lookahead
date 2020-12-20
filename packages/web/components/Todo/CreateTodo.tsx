@@ -2,7 +2,7 @@ import { Box, Button, ClickAwayListener, TextField } from "@material-ui/core";
 import { withStyles } from "@material-ui/styles";
 import React from "react";
 import { authServices } from "../Firebase/services";
-import { checkEmptyStr, getDate } from "../util";
+import { checkEmptyStr } from "../util";
 import { useLoader } from "../Navbar/Loader";
 
 const BorderlessField = withStyles({
@@ -52,7 +52,7 @@ const CreateTodo = ({ firestore }: Props) => {
       .add({
         content: content.trim(),
         title: title.trim(),
-        last_edited: JSON.stringify(getDate()),
+        last_edited: new Date().toISOString(),
       })
       .then(() => loader.stop())
       .catch((e) => {

@@ -1,4 +1,4 @@
-context("Lookahead Web App", async () => {
+context("Lookahead Web App - Landing Page", async () => {
   beforeEach(() => {
     cy.visit("http://localhost:3000");
   });

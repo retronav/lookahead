@@ -3,8 +3,11 @@ export type LastEdited = {
   date: string;
   time: string;
 };
-export const getDate = (dateObj?: Date) => {
-  const date = dateObj ?? new Date();
+/**
+ * ISOToReadableDate Converts an ISO 8601 timestamp to readable date
+ * @param iso the ISO 8601 timestamp
+ */
+export const ISOToReadableDate = (iso: string) => {
   const months = [
     "Jan",
     "Feb",
@@ -19,14 +22,13 @@ export const getDate = (dateObj?: Date) => {
     "Nov",
     "Dec",
   ];
-  return {
-    date: `${date.getDate()} ${months[date.getMonth()]}, ${date.getFullYear()}`,
-    time: `${
-      date.getHours() === 0 ? "00" : date.getHours().toString().padStart(2, "0")
-    }:${
-      date.getMinutes() === 0
-        ? "00"
-        : date.getMinutes().toString().padStart(2, "0")
-    }`,
-  };
+  const dateObj = new Date(iso);
+  const date = dateObj.getDate();
+  const month = dateObj.getMonth();
+  const year = dateObj.getFullYear();
+  const hour = dateObj.getHours();
+  const minute = dateObj.getMinutes();
+  return `${date} ${months[month]}, ${year} at ${
+    hour === 0 ? "00" : hour.toString().padStart(2, "0")
+  }:${minute === 0 ? "00" : minute.toString().padStart(2, "0")}`;
 };

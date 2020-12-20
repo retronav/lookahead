@@ -10,7 +10,7 @@ import {
 import { createStyles, makeStyles, withStyles } from "@material-ui/core/styles";
 import { useSnackbar } from "notistack";
 import * as React from "react";
-import { checkEmptyStr, getDate, LastEdited } from "../util";
+import { checkEmptyStr, ISOToReadableDate } from "../util";
 import { authServices } from "../Firebase/services";
 import { TodoData } from "../Application/Application";
 interface Props {
@@ -63,12 +63,12 @@ const BorderlessContentField = withStyles({
 
 const EditTodo = ({ dialogState, handleClose, firestore }: Props) => {
   const { useAuth } = authServices();
-  const todaysDate = getDate();
+  const todaysDate = new Date().toISOString();
   const currentUser = useAuth();
   const [title, setTitle] = React.useState(dialogState.data.title);
   const [content, setContent] = React.useState(dialogState.data.content);
-  const [lastEdited, setLastEdited] = React.useState<LastEdited>(
-    JSON.parse(dialogState.data.last_edited)
+  const [lastEdited, setLastEdited] = React.useState<string>(
+    dialogState.data.last_edited
   );
   const snackbar = useSnackbar();
   const classes = useStyles();
@@ -86,7 +86,7 @@ const EditTodo = ({ dialogState, handleClose, firestore }: Props) => {
         .update({
           content: content,
           title: title,
-          last_edited: JSON.stringify(getDate()),
+          last_edited: todaysDate,
         });
   };
   const handleDelete = () => {
@@ -154,15 +154,7 @@ const EditTodo = ({ dialogState, handleClose, firestore }: Props) => {
       <p style={{ textAlign: "right", margin: 0, paddingRight: "1em" }}>
         <small>ID : {dialogState.data.id}</small>
         <br />
-        {lastEdited && (
-          <small>
-            Edited
-            {todaysDate.date !== lastEdited.date
-              ? " " + lastEdited.date + " at "
-              : " "}
-            {lastEdited.time}
-          </small>
-        )}
+        {lastEdited && <small>Edited {ISOToReadableDate(lastEdited)}</small>}
       </p>
       <br />
       <DialogActions>
