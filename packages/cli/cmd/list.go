@@ -18,11 +18,11 @@ package cmd
 import (
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/tidwall/gjson"
 	"lookahead.web.app/cli/internal/credential"
 	"lookahead.web.app/cli/internal/logging"
 	"lookahead.web.app/cli/internal/store"
@@ -36,7 +36,17 @@ func checkStringEmptyOrOnlySpaces(str string) bool {
 }
 
 func lastEditedStringFormat(lastEdited string) string {
-	return gjson.Get(lastEdited, "date").Str + " at " + gjson.Get(lastEdited, "time").Str
+	timeObj, _ := time.Parse(time.RFC3339, lastEdited)
+	timeObj = timeObj.Local()
+	hour := fmt.Sprint(timeObj.Hour())
+	minute := fmt.Sprint(timeObj.Minute())
+	if len(hour) == 1 {
+		hour = "0" + hour
+	}
+	if len(minute) == 1 {
+		minute = "0" + minute
+	}
+	return fmt.Sprintf("%v %v, %v at %v:%v", timeObj.Day(), timeObj.Month().String(), timeObj.Year(), hour, minute)
 }
 
 func getLastPathOfDocId(docId string) string {

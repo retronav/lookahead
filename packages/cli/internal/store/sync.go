@@ -3,6 +3,7 @@ package store
 import (
 	"encoding/json"
 	"io/ioutil"
+	"sort"
 	"time"
 
 	"github.com/mitchellh/mapstructure"
@@ -50,16 +51,16 @@ func (s storeStruct) Sync(force bool) {
 						//Look for mutated items and update them
 						newItem = false
 						if lItem.LastEdited != item.LastEdited {
-							lts := util.DateJSONToTimestamp(lItem.LastEdited)
-							ts := util.DateJSONToTimestamp(item.LastEdited)
+							lts := util.RFC3339ToUnix(lItem.LastEdited)
+							ts := util.RFC3339ToUnix(item.LastEdited)
 							if lts > ts {
 								//This item was edited in the CLI,
 								//But the user was offline. Update it
 								rest.RestClient.Set(lItem.Id, lItem.Title, lItem.Content, lItem.LastEdited)
+							} else {
+								//This item got updated on the web app. Update it
+								localJSON[i] = item
 							}
-						} else {
-							//This item got updated on the web app. Update it
-							localJSON[i] = item
 						}
 					}
 					continue outer
@@ -93,14 +94,19 @@ func (s storeStruct) Sync(force bool) {
 			if deletedItem {
 				if len(localJSON) > (i + 1) {
 					//Remove the item and push the remaining ones ahead
-					//This seems to be computationally expensive, so
-					//TODO(obnoxiousnerd): find alternatives to this
-					localJSON = append(localJSON[:i], localJSON[i+1:]...)
+					//Since everything is goind to be sorted anyway,
+					//Use second approach in https://stackoverflow.com/a/37335777/12020232
+					localJSON[i] = localJSON[len(localJSON)-1]
+					localJSON = localJSON[:len(localJSON)-1]
 				} else {
 					localJSON = localJSON[:len(localJSON)-1]
 				}
 			}
 		}
+		//Sort the elements by date; ascending order
+		sort.SliceStable(localJSON, func(i, j int) bool {
+			return util.RFC3339ToUnix(localJSON[i].LastEdited) < util.RFC3339ToUnix(localJSON[j].LastEdited)
+		})
 		toWrite, _ := json.Marshal(localJSON)
 		timeStamp := time.Now().Unix()
 		ioutil.WriteFile(s.storeLoc, []byte(toWrite), s.filePermissions)
