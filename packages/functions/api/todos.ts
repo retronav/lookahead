@@ -1,7 +1,6 @@
 import { NowRequest, NowResponse } from "@vercel/node";
 import joi from "joi";
 import admin from "firebase-admin";
-import { getDate } from "../util";
 const app = admin.initializeApp({
   credential: admin.credential.cert(
     JSON.parse(
