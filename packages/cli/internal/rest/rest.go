@@ -19,6 +19,13 @@ func getAPIEndpoint() string {
 	return "https://lookahead-api.vercel.app/todos"
 }
 
+type dataSchema struct {
+	Title      string `json:"title"`
+	Content    string `json:"content"`
+	Id         string `json:"id"`
+	LastEdited string `json:"last_edited"`
+}
+
 type restClientStruct struct {
 	//IdToken The token used for making transactions with the database
 	IdToken    string
@@ -28,8 +35,8 @@ type restClientStruct struct {
 type restClientMethods interface {
 	Add(title string, content string, last_edited string) error
 	Delete()
-	GetAll() ([]map[string]interface{}, error)
-	Get(id string) (map[string]interface{}, error)
+	GetAll() ([]dataSchema, error)
+	Get(id string) (dataSchema, error)
 	Set(id string, title string, content string, last_edited string) error
 }
 
@@ -59,50 +66,54 @@ func (c restClientStruct) Add(title string, content string, last_edited string) 
 	}
 	return nil
 }
-func (c restClientStruct) Delete() {}
+func (c restClientStruct) Delete(id string) error {
+	reqBody := map[string]string{"id": id}
+	reqBodyJSON, _ := json.Marshal(reqBody)
+	req, _ := http.NewRequest(http.MethodDelete, getAPIEndpoint(), bytes.NewBuffer(reqBodyJSON))
+	req.Header.Add("Authorization", "Bearer "+c.IdToken)
+	req.Header.Add("Content-Type", "application/json")
 
-func (c restClientStruct) Get(id string) (map[string]interface{}, error) {
+	res, err := c.httpClient.Do(req)
+
+	if err != nil {
+		return err
+	}
+	resBody, _ := ioutil.ReadAll(res.Body)
+	resMsg := gjson.GetBytes(resBody, "message").Str
+	if resMsg != "OK" {
+		return errors.New("There was some problem on our side. Sorry for incovenience!!")
+	}
+	return nil
+}
+
+func (c restClientStruct) Get(id string) (dataSchema, error) {
 	req, _ := http.NewRequest(http.MethodGet, getAPIEndpoint(), nil)
 	req.Header.Add("Authorization", "Bearer "+c.IdToken)
 	req.URL.Query().Add("id", id)
 
 	res, err := c.httpClient.Do(req)
 	if err == nil {
-		todo := make(map[string]interface{})
 		todoBytes, _ := ioutil.ReadAll(res.Body)
 		todoParsed := gjson.ParseBytes(todoBytes)
-
-		todo["id"] = todoParsed.Get("id")
-		todo["title"] = todoParsed.Get("data.title").String()
-		todo["content"] = todoParsed.Get("data.content").String()
-		todo["last_edited"] = todoParsed.Get("data.last_edited").String()
+		todo := todoParsed.Value().(dataSchema)
 
 		return todo, nil
 	} else {
-		return nil, err
+		return dataSchema{}, err
 	}
 }
 
 // GetAll fetch all the user todos from the serverless API.
 // To identify the user, the user-authenticated OAuth2 token or a Firebase ID token.
-func (c restClientStruct) GetAll() ([]map[string]interface{}, error) {
+func (c restClientStruct) GetAll() ([]dataSchema, error) {
 	req, _ := http.NewRequest(http.MethodGet, getAPIEndpoint(), nil)
 	req.Header.Add("Authorization", "Bearer "+c.IdToken)
 
 	res, err := c.httpClient.Do(req)
 	if err == nil {
-		todos := make([]map[string]interface{}, 0)
+		todos := make([]dataSchema, 0)
 		todosBytes, _ := ioutil.ReadAll(res.Body)
-		todosParsed := gjson.ParseBytes(todosBytes).Array()
-
-		for _, todo := range todosParsed {
-			toPush := make(map[string]interface{})
-			toPush["id"] = todo.Get("id").String()
-			toPush["title"] = todo.Get("data.title").String()
-			toPush["content"] = todo.Get("data.content").String()
-			toPush["last_edited"] = todo.Get("data.last_edited").String()
-			todos = append(todos, toPush)
-		}
+		json.Unmarshal(todosBytes, &todos)
 
 		return todos, nil
 	} else {

@@ -39,6 +39,7 @@ type storeStruct struct {
 
 type storeInterface interface {
 	Append(id string, title string, content string) (bool, error)
+	Delete(id string) (bool, error)
 	Get(id string) (DataSchema, error)
 	GetAll() ([]DataSchema, error)
 	Sync()
@@ -80,7 +81,17 @@ func (s storeStruct) Append(title string, content string) (bool, error) {
 	}
 	return isOffline, nil
 }
-
+func (s storeStruct) Delete(id string) (bool, error) {
+	if s.IdExists(id) {
+		err := rest.RestClient.Delete(id)
+		if err != nil {
+			return false, errors.New("There was an error while deleting from the database. Please try again later.")
+		}
+		s.Sync(true)
+		return true, nil
+	}
+	return false, errors.New("ID Not found")
+}
 func (s storeStruct) Get(id string) (DataSchema, error) {
 	if s.IdExists(id) {
 		all, err := s.GetAll()
