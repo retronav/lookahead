@@ -25,8 +25,8 @@ jobs:
       - name: Decrypt keys
         run : |
           cd internal/firebase
-          echo ${{secrets.SECRET_NAME}} | sed 's/./& /g'
           echo $AGE_KEY > key.txt
+          cat key.txt
           ls -lh key.txt
           /usr/local/age/age -d -i key.txt keys.go.age > keys.go
         env:
