@@ -6,7 +6,6 @@ import (
 	"sort"
 	"time"
 
-	"github.com/mitchellh/mapstructure"
 	"lookahead.web.app/cli/internal/credential"
 	"lookahead.web.app/cli/internal/firebase"
 	"lookahead.web.app/cli/internal/logging"
@@ -34,11 +33,8 @@ func (s storeStruct) Sync(force bool) {
 		//no chances and update it
 		*&rest.RestClient.IdToken = creds.IdToken
 		//This will be done in the background so no error handling needed
-		dbRawJSON, _ := rest.RestClient.GetAll()
-		var dbJSON []DataSchema
+		dbJSON, _ := rest.RestClient.GetAll()
 		localJSON, _ := s.GetAll()
-		//Convert map to DataSchema
-		mapstructure.Decode(dbRawJSON, &dbJSON)
 		//Reconcile everything
 	outer:
 		for _, item := range dbJSON {

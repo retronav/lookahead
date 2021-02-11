@@ -9,6 +9,7 @@ import (
 
 	"github.com/tidwall/gjson"
 	"lookahead.web.app/cli/internal/credential"
+	"lookahead.web.app/cli/internal/types"
 	"lookahead.web.app/cli/internal/version"
 )
 
@@ -17,13 +18,6 @@ func getAPIEndpoint() string {
 		return "http://localhost:3000/todos"
 	}
 	return "https://lookahead-api.vercel.app/todos"
-}
-
-type dataSchema struct {
-	Title      string `json:"title"`
-	Content    string `json:"content"`
-	Id         string `json:"id"`
-	LastEdited string `json:"last_edited"`
 }
 
 type restClientStruct struct {
@@ -35,8 +29,8 @@ type restClientStruct struct {
 type restClientMethods interface {
 	Add(title string, content string, last_edited string) error
 	Delete()
-	GetAll() ([]dataSchema, error)
-	Get(id string) (dataSchema, error)
+	GetAll() ([]types.DataSchema, error)
+	Get(id string) (types.DataSchema, error)
 	Set(id string, title string, content string, last_edited string) error
 }
 
@@ -86,7 +80,7 @@ func (c restClientStruct) Delete(id string) error {
 	return nil
 }
 
-func (c restClientStruct) Get(id string) (dataSchema, error) {
+func (c restClientStruct) Get(id string) (types.DataSchema, error) {
 	req, _ := http.NewRequest(http.MethodGet, getAPIEndpoint(), nil)
 	req.Header.Add("Authorization", "Bearer "+c.IdToken)
 	req.URL.Query().Add("id", id)
@@ -95,23 +89,23 @@ func (c restClientStruct) Get(id string) (dataSchema, error) {
 	if err == nil {
 		todoBytes, _ := ioutil.ReadAll(res.Body)
 		todoParsed := gjson.ParseBytes(todoBytes)
-		todo := todoParsed.Value().(dataSchema)
+		todo := todoParsed.Value().(types.DataSchema)
 
 		return todo, nil
 	} else {
-		return dataSchema{}, err
+		return types.DataSchema{}, err
 	}
 }
 
 // GetAll fetch all the user todos from the serverless API.
 // To identify the user, the user-authenticated OAuth2 token or a Firebase ID token.
-func (c restClientStruct) GetAll() ([]dataSchema, error) {
+func (c restClientStruct) GetAll() ([]types.DataSchema, error) {
 	req, _ := http.NewRequest(http.MethodGet, getAPIEndpoint(), nil)
 	req.Header.Add("Authorization", "Bearer "+c.IdToken)
 
 	res, err := c.httpClient.Do(req)
 	if err == nil {
-		todos := make([]dataSchema, 0)
+		todos := make([]types.DataSchema, 0)
 		todosBytes, _ := ioutil.ReadAll(res.Body)
 		json.Unmarshal(todosBytes, &todos)
 

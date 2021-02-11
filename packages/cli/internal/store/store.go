@@ -5,31 +5,16 @@ import (
 	"errors"
 	"io/ioutil"
 	"os"
-	"path"
+	"path/filepath"
 
 	"lookahead.web.app/cli/internal/constants"
 	"lookahead.web.app/cli/internal/rest"
+	"lookahead.web.app/cli/internal/types"
 	"lookahead.web.app/cli/internal/util"
 )
 
 func getStoreLocation() string {
-	return path.Join(constants.CONFIG_PATH, "store.json")
-}
-
-//DataSchema The schema to follow while writing or reading data from
-//the local store.
-type DataSchema struct {
-	Title      string `json:"title" mapstructure:"title"`
-	Content    string `json:"content" mapstructure:"content"`
-	Id         string `json:"id" mapstructure:"id"`
-	LastEdited string `json:"last_edited" mapstructure:"last_edited"`
-	New        bool   `json:"new,omitempty"`
-}
-
-//rawDataSchema copy of DataSchema, but just the raw data
-type rawDataSchema struct {
-	Title   string `json:"title"`
-	Content string `json:"content"`
+	return filepath.Join(constants.CONFIG_PATH, "store.json")
 }
 
 type storeStruct struct {
@@ -40,8 +25,8 @@ type storeStruct struct {
 type storeInterface interface {
 	Append(id string, title string, content string) (bool, error)
 	Delete(id string) (bool, error)
-	Get(id string) (DataSchema, error)
-	GetAll() ([]DataSchema, error)
+	Get(id string) (types.DataSchema, error)
+	GetAll() ([]types.DataSchema, error)
 	Sync()
 	Update(id string, title string, content string) (bool, error)
 	IdExists(id string) bool
@@ -55,7 +40,7 @@ func (s storeStruct) Append(title string, content string) (bool, error) {
 	if s.IdExists(newId) {
 		newId = util.GenerateDocID()
 	}
-	data := DataSchema{
+	data := types.DataSchema{
 		Id:         newId,
 		Title:      title,
 		Content:    content,
@@ -92,11 +77,11 @@ func (s storeStruct) Delete(id string) (bool, error) {
 	}
 	return false, errors.New("ID Not found")
 }
-func (s storeStruct) Get(id string) (DataSchema, error) {
+func (s storeStruct) Get(id string) (types.DataSchema, error) {
 	if s.IdExists(id) {
 		all, err := s.GetAll()
 		if err != nil {
-			return DataSchema{}, err
+			return types.DataSchema{}, err
 		}
 		for _, todo := range all {
 			if todo.Id == id {
@@ -104,14 +89,14 @@ func (s storeStruct) Get(id string) (DataSchema, error) {
 			}
 		}
 	}
-	return DataSchema{}, errors.New("ID not found")
+	return types.DataSchema{}, errors.New("ID not found")
 }
 
 //GetAll Gets all values from the local store
-func (s storeStruct) GetAll() ([]DataSchema, error) {
+func (s storeStruct) GetAll() ([]types.DataSchema, error) {
 	if _, err := os.Stat(s.storeLoc); err == nil {
 		content, _ := ioutil.ReadFile(s.storeLoc)
-		storeJSON := []DataSchema{}
+		storeJSON := []types.DataSchema{}
 		json.Unmarshal(content, &storeJSON)
 		return storeJSON, nil
 	}
@@ -133,7 +118,7 @@ func (s storeStruct) IdExists(id string) bool {
 func (s storeStruct) Update(id string, title string, content string) (bool, error) {
 	isOffline := false
 	existingJSON, _ := s.GetAll()
-	data := DataSchema{
+	data := types.DataSchema{
 		Id:         id,
 		Title:      title,
 		Content:    content,

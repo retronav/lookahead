@@ -26,6 +26,7 @@ import (
 	"lookahead.web.app/cli/internal/credential"
 	"lookahead.web.app/cli/internal/logging"
 	"lookahead.web.app/cli/internal/store"
+	"lookahead.web.app/cli/internal/types"
 )
 
 func checkStringEmptyOrOnlySpaces(str string) bool {
@@ -54,7 +55,7 @@ func getLastPathOfDocId(docId string) string {
 	return arr[len(arr)-1]
 }
 
-func printWholeTodo(todo store.DataSchema) {
+func printWholeTodo(todo types.DataSchema) {
 	fmt.Println("Todo id:", getLastPathOfDocId(todo.Id))
 	color.HiCyan(todo.Title)
 	if !checkStringEmptyOrOnlySpaces(todo.Content) {
