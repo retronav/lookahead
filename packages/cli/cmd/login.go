@@ -18,7 +18,7 @@ package cmd
 import (
 	"bytes"
 	"encoding/json"
-	"io/ioutil"
+	"fmt"
 	"os"
 	"regexp"
 	"time"
@@ -59,10 +59,10 @@ var loginCmd = &cobra.Command{
 				loginTokens = getLoginTokens(email, identityKey.String())
 			}
 			s.Suffix = " Logging in"
-			credsLoc := credential.GetCredentialsLocation()
-			loginTokensJSON, _ := json.Marshal(loginTokens)
-			err := ioutil.WriteFile(credsLoc, []byte(loginTokensJSON), 0666)
+			err := credential.WriteCredentials(loginTokens)
 			if err != nil {
+				s.Stop()
+				fmt.Println(err.Error())
 				logging.Error(1, "Couldn't save credentials. Make sure you have"+
 					" the permissions to save files :(")
 			}

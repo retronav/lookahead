@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"os"
-	"path"
+	"path/filepath"
 
 	"lookahead.web.app/cli/internal/constants"
 	"lookahead.web.app/cli/internal/logging"
@@ -29,7 +29,7 @@ type CredentialsStruct struct {
 
 //GetCredentialsLocation Return the path of the credentials file
 func GetCredentialsLocation() string {
-	return path.Join(constants.CONFIG_PATH, ".lookaheadrc")
+	return filepath.Join(constants.CONFIG_PATH, ".lookaheadrc")
 }
 
 //ReadCredentials Get the credentials and return them
@@ -47,19 +47,31 @@ func ReadCredentials() CredentialsStruct {
 	return CredentialsStruct{}
 }
 
-func WriteCredentials(data CredentialsStruct) bool {
+func WriteCredentials(data CredentialsStruct) error {
 	credsLoc := GetCredentialsLocation()
 	dataToWrite, _ := json.Marshal(data)
-	if _, err := os.Stat(credsLoc); err == nil {
+	_, err := os.Stat(credsLoc)
+	if os.IsNotExist(err) {
+		os.MkdirAll(constants.CONFIG_PATH, 0700)
+		var file, err = os.Create(credsLoc)
+		if err != nil {
+			return err
+		}
+		_, err = file.Write(dataToWrite)
+		if err != nil {
+			return err
+		}
+		defer file.Close()
+		return nil
+	} else if err == nil {
 		err := ioutil.WriteFile(credsLoc, dataToWrite, writeCredentialsFilePermissions)
 		if err != nil {
-			return false
+			return err
 		}
-		return true
+		return nil
 	}
-	return false
+	return nil
 }
-
 func CheckIfUserLoggedIn() bool {
 	creds := ReadCredentials()
 	if creds.IdToken != "" && creds.RefreshToken != "" {
