@@ -17,9 +17,9 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"lookahead.web.app/cli/internal/actions"
 	"lookahead.web.app/cli/internal/credential"
 	"lookahead.web.app/cli/internal/logging"
-	"lookahead.web.app/cli/internal/store"
 )
 
 // deleteCmd represents the delete command
@@ -37,18 +37,7 @@ will contain the ID specified. Grab the ID and then run this command.`,
 				" Use `look login` to login")
 		}
 		id := args[0]
-		//Check if ID really exists
-		exists := store.Store.IdExists(id)
-		if !exists {
-			logging.Error(1, "ID not found! Please check that ID again!")
-		}
-		deleted, err := store.Store.Delete(id)
-		if err != nil {
-			logging.Error(1, err.Error())
-		}
-		if deleted {
-			logging.Success("Successfully deleted todo/note!")
-		}
+		actions.Delete(id)
 	},
 }
 
