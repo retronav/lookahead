@@ -52,11 +52,17 @@ func init() {
 	//Initialize default config
 	viper.SetDefault("numberOfEntries", 5)
 
-	shouldUpdateStore := true
-	//If the command is `sync` skip sync
-	if len(os.Args) >= 2 && os.Args[1] == "sync" {
-		shouldUpdateStore = false
+	shouldUpdateStore := false
+	//updateStoreOnTheseCommands array containing commands which will trigger
+	//local store update
+	updateStoreOnTheseCommands := []string{"list", "edit", "delete", "new"}
+
+	for _, command := range updateStoreOnTheseCommands {
+		if len(os.Args) >= 2 && os.Args[1] == command {
+			shouldUpdateStore = true
+		}
 	}
+
 	if shouldUpdateStore {
 		//Sync the store
 		store.Store.Sync(false)
