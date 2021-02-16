@@ -52,6 +52,7 @@ var loginCmd = &cobra.Command{
 		}
 		emailRequestSent := sendEmailRequest(email, identityKey.String())
 		if emailRequestSent {
+			logging.Info("We've sent you an link to your email to sign in.")
 			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
 			s.Suffix = color.CyanString(" Waiting for you to open the link")
 			s.Start()
