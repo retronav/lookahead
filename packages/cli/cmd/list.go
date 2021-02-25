@@ -18,7 +18,6 @@ package cmd
 import (
 	"fmt"
 	"strings"
-	"time"
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
@@ -36,20 +35,6 @@ func checkStringEmptyOrOnlySpaces(str string) bool {
 	return false
 }
 
-func lastEditedStringFormat(lastEdited string) string {
-	timeObj, _ := time.Parse(time.RFC3339, lastEdited)
-	timeObj = timeObj.Local()
-	hour := fmt.Sprint(timeObj.Hour())
-	minute := fmt.Sprint(timeObj.Minute())
-	if len(hour) == 1 {
-		hour = "0" + hour
-	}
-	if len(minute) == 1 {
-		minute = "0" + minute
-	}
-	return fmt.Sprintf("%v %v, %v at %v:%v", timeObj.Day(), timeObj.Month().String(), timeObj.Year(), hour, minute)
-}
-
 func getLastPathOfDocId(docId string) string {
 	arr := strings.Split(docId, "/")
 	return arr[len(arr)-1]
@@ -61,7 +46,7 @@ func printWholeTodo(todo types.DataSchema) {
 	if !checkStringEmptyOrOnlySpaces(todo.Content) {
 		fmt.Println(todo.Content)
 	}
-	fmt.Println(lastEditedStringFormat(todo.LastEdited))
+	fmt.Println(todo.ToLastEditedHuman())
 	fmt.Println()
 }
 
