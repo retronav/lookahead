@@ -24,23 +24,15 @@ import (
 
 // editCmd represents the set command
 var editCmd = &cobra.Command{
-	Use:   "edit [id]",
+	Use:   "edit",
 	Short: "Update a todo/note by specifying its ID.",
-	Long: `Update a todo/note by specifying its ID.
-
-To know the ID of the note you're looking for, run "look list". The output
-will contain the ID specified. Grab the ID and then run this command.
-
-By default, editing the content is disabled. If you need to edit the content, then you need
-to pass the -c flag.`,
-	Args: cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		//If user is logged out
 		if credential.CheckIfUserLoggedIn() == false {
 			logging.Error(1, "You should be logged in to run this command!!"+
 				" Use `look login` to login")
 		}
-		id := args[0]
+		id := actions.Find().Id
 		shouldEditContent, _ := cmd.Flags().GetBool("content")
 		actions.Edit(id, shouldEditContent)
 	},

@@ -7,6 +7,7 @@ require (
 	github.com/enescakir/emoji v1.0.0
 	github.com/fatih/color v1.10.0
 	github.com/google/uuid v1.1.2
+	github.com/manifoldco/promptui v0.8.0
 	github.com/mattn/go-colorable v0.1.8
 	github.com/mattn/go-isatty v0.0.12
 	github.com/spf13/cobra v1.1.1

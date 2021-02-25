@@ -23,6 +23,19 @@ func Input(question string) string {
 	return answer
 }
 
+func Confirm(question string) bool {
+	confirmed := false
+	logging.Ask(question + " [y/N]: ")
+	reader := bufio.NewReader(os.Stdin)
+	answer, _ := reader.ReadString(byte('\n'))
+	answer = strings.Trim(answer, "\n")
+	answer = strings.Trim(answer, "\r")
+	if answer == "y" || answer == "Y" {
+		confirmed = true
+	}
+	return confirmed
+}
+
 //MultilineInput accepts input from the end user, but supports multiline.
 //
 //The strategy is :
