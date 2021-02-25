@@ -16,8 +16,6 @@ limitations under the License.
 package cmd
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
 	"os"
 	"regexp"
@@ -28,7 +26,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/spf13/cobra"
 	"lookahead.web.app/cli/internal/credential"
-	"lookahead.web.app/cli/internal/http"
+	"lookahead.web.app/cli/internal/firebase"
 	"lookahead.web.app/cli/internal/input"
 	"lookahead.web.app/cli/internal/logging"
 )
@@ -50,14 +48,14 @@ var loginCmd = &cobra.Command{
 			color.HiRed("Invalid Email!!!")
 			os.Exit(1)
 		}
-		emailRequestSent := sendEmailRequest(email, identityKey.String())
+		emailRequestSent := firebase.Auth.SendEmailRequest(email, identityKey.String())
 		if emailRequestSent {
 			logging.Info("We've sent you an link to your email to sign in.")
 			s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
 			s.Suffix = color.CyanString(" Waiting for you to open the link")
 			s.Start()
 			for loginTokens.IdToken == "" {
-				loginTokens = getLoginTokens(email, identityKey.String())
+				loginTokens = firebase.Auth.GetLoginTokens(email, identityKey.String())
 			}
 			s.Suffix = " Logging in"
 			err := credential.WriteCredentials(loginTokens)
@@ -81,36 +79,6 @@ func checkEmailValidity(email string) bool {
 		return false
 	}
 	return emailRegex.MatchString(email)
-}
-
-// sendEmailRequest sends a request to the backend
-// to send the authentication email to the user's email
-func sendEmailRequest(email string, identityKey string) bool {
-	reqBody, _ := json.Marshal(map[string]string{"email": email, "identityKey": identityKey})
-	reqHeaders := map[string]string{"Content-Type": "application/json"}
-	res, err := http.Post("https://lookahead-api.vercel.app/send-email-link", reqHeaders, bytes.NewReader(reqBody))
-	if err != nil {
-		color.HiRed("Some error happened %s", err)
-		os.Exit(1)
-	}
-	var resJSON map[string]interface{}
-	json.Unmarshal([]byte(res), &resJSON)
-	return resJSON["message"] == "OK"
-}
-
-// getLoginTokens gets the login tokens after the user clicks the email link
-func getLoginTokens(email string, identityKey string) credential.CredentialsStruct {
-	time.Sleep(1500 * time.Millisecond)
-	reqBody, _ := json.Marshal(map[string]string{"email": email, "identityKey": identityKey})
-	reqHeaders := map[string]string{"Content-Type": "application/json"}
-	res, err := http.Post("https://lookahead-api.vercel.app/get-login-tokens", reqHeaders, bytes.NewReader(reqBody))
-	if err != nil {
-		logging.Error(1, err.Error())
-	}
-	var resJSON = credential.CredentialsStruct{}
-	json.Unmarshal([]byte(res), &resJSON)
-	resJSON.SignInTimestamp = time.Now().Unix()
-	return resJSON
 }
 
 func init() {
