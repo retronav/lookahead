@@ -28,11 +28,6 @@ export default async (req: NowRequest, res: NowResponse) => {
   const decodedToken: admin.auth.DecodedIdToken = await app
     .auth()
     .verifyIdToken(userToken);
-  if (decodedToken) {
-    console.log("decoded token present");
-  } else {
-    console.log("decoded token not present");
-  }
   switch (req.method) {
     case "GET":
       const id = req.query.id;
@@ -48,7 +43,7 @@ export default async (req: NowRequest, res: NowResponse) => {
           return;
         }
         const todo = todoData.docs[0];
-        res.send({ id: id, data: todo.data() });
+        res.send({ id: id, ...todo.data() });
       } else {
         // Else send all documents
         const todos = [];
@@ -56,7 +51,7 @@ export default async (req: NowRequest, res: NowResponse) => {
           .collection(`users/${decodedToken.uid}/todos`)
           .get();
         todoData.docs.forEach((todo) =>
-          todos.push({ id: todo.id, data: todo.data() })
+          todos.push({ id: todo.id, ...todo.data() })
         );
         res.send(todos);
       }
