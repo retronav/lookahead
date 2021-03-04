@@ -10,15 +10,7 @@ import (
 	"github.com/tidwall/gjson"
 	"lookahead.web.app/cli/internal/credential"
 	"lookahead.web.app/cli/internal/types"
-	"lookahead.web.app/cli/internal/version"
 )
-
-func getAPIEndpoint() string {
-	if version.Version == "Dev" {
-		return "http://localhost:3000/todos"
-	}
-	return "https://lookahead-api.vercel.app/todos"
-}
 
 type restClientStruct struct {
 	//IdToken The token used for making transactions with the database
@@ -44,7 +36,7 @@ func (c restClientStruct) Add(title string, content string, last_edited string) 
 		"data": reqBodyData,
 	}
 	reqBodyJSON, _ := json.Marshal(reqBody)
-	req, _ := http.NewRequest(http.MethodPost, getAPIEndpoint(), bytes.NewBuffer(reqBodyJSON))
+	req, _ := http.NewRequest(http.MethodPost, types.Endpoints.TODOS, bytes.NewBuffer(reqBodyJSON))
 	req.Header.Add("Authorization", "Bearer "+c.IdToken)
 	req.Header.Add("Content-Type", "application/json")
 
@@ -63,7 +55,7 @@ func (c restClientStruct) Add(title string, content string, last_edited string) 
 func (c restClientStruct) Delete(id string) error {
 	reqBody := map[string]string{"id": id}
 	reqBodyJSON, _ := json.Marshal(reqBody)
-	req, _ := http.NewRequest(http.MethodDelete, getAPIEndpoint(), bytes.NewBuffer(reqBodyJSON))
+	req, _ := http.NewRequest(http.MethodDelete, types.Endpoints.TODOS, bytes.NewBuffer(reqBodyJSON))
 	req.Header.Add("Authorization", "Bearer "+c.IdToken)
 	req.Header.Add("Content-Type", "application/json")
 
@@ -81,7 +73,7 @@ func (c restClientStruct) Delete(id string) error {
 }
 
 func (c restClientStruct) Get(id string) (types.DataSchema, error) {
-	req, _ := http.NewRequest(http.MethodGet, getAPIEndpoint(), nil)
+	req, _ := http.NewRequest(http.MethodGet, types.Endpoints.TODOS, nil)
 	req.Header.Add("Authorization", "Bearer "+c.IdToken)
 	req.URL.Query().Add("id", id)
 
@@ -100,7 +92,7 @@ func (c restClientStruct) Get(id string) (types.DataSchema, error) {
 // GetAll fetch all the user todos from the serverless API.
 // To identify the user, the user-authenticated OAuth2 token or a Firebase ID token.
 func (c restClientStruct) GetAll() ([]types.DataSchema, error) {
-	req, _ := http.NewRequest(http.MethodGet, getAPIEndpoint(), nil)
+	req, _ := http.NewRequest(http.MethodGet, types.Endpoints.TODOS, nil)
 	req.Header.Add("Authorization", "Bearer "+c.IdToken)
 
 	res, err := c.httpClient.Do(req)
@@ -125,7 +117,7 @@ func (c restClientStruct) Set(id string, title string, content string, last_edit
 		"last_edited": last_edited,
 	}
 	reqBodyJSON, _ := json.Marshal(reqBody)
-	req, _ := http.NewRequest(http.MethodPatch, getAPIEndpoint(), bytes.NewBuffer(reqBodyJSON))
+	req, _ := http.NewRequest(http.MethodPatch, types.Endpoints.TODOS, bytes.NewBuffer(reqBodyJSON))
 	req.Header.Add("Authorization", "Bearer "+c.IdToken)
 	req.Header.Add("Content-Type", "application/json")
 

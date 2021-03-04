@@ -4,6 +4,8 @@ import (
 	"math/rand"
 	"net/http"
 	"time"
+
+	"lookahead.web.app/cli/internal/types"
 )
 
 //IsOnline Check whether user is connected to the Internet or not.
@@ -13,7 +15,7 @@ import (
 func IsOnline() bool {
 	//Make a request to the Lookahead API server
 	//We need the error only, nothing else :)
-	_, err := http.Get("https://lookahead-api.vercel.app/")
+	_, err := http.Get(types.CLIAPIEndpoint)
 	//err = nil means online
 	if err == nil {
 		return true
