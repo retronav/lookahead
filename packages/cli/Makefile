@@ -10,7 +10,11 @@ endif
 DEV_VER := $$(git rev-parse --short HEAD)
 
 build/single:
+ifeq (${PROD},1)
 	go build -ldflags "-s -w -X 'lookahead.web.app/cli/internal/version.Version=$(DEV_VER)'" -o $(DEV_EXE_NAME) ./main.go
+else
+	go build -ldflags "-s -w" -o $(DEV_EXE_NAME) ./main.go
+endif
 install:
 	cp $(DEV_EXE_NAME) ${GOPATH}/bin
 build:
@@ -19,23 +23,38 @@ build:
 	build/darwin \
 	build/linux
 build/win:
-ifeq (${FIXEDVER},1)
-	GOOS=windows GOARCH=amd64 go build -ldflags "-s -w -X 'lookahead.web.app/cli/internal/version.Version=$(FIXEDVERSION)'" -o ./build/win32-amd64/look.exe ./main.go
+ifeq (${PROD},1)
+ifeq (${RELEASE},1)
+	GOOS=windows GOARCH=amd64 go build -ldflags "-s -w -X 'lookahead.web.app/cli/internal/version.Version=$$(git describe --abbrev=0)'" -o ./build/win32-amd64/look.exe ./main.go
 else
-	GOOS=windows GOARCH=amd64 go build -ldflags "-s -w -X 'lookahead.web.app/cli/internal/version.Version=$$(git describe --abbrev=0 --tags)'" -o ./build/win32-amd64/look.exe ./main.go
+	GOOS=windows GOARCH=amd64 go build -ldflags "-s -w -X 'lookahead.web.app/cli/internal/version.Version=$(DEV_VER)'" -o ./build/win32-amd64/look.exe ./main.go
 endif
-build/darwin:
-ifeq (${FIXEDVER},1)
-	GOOS=darwin GOARCH=amd64 go build -ldflags "-s -w -X 'lookahead.web.app/cli/internal/version.Version=$(FIXEDVERSION)'" -o ./build/darwin-amd64/look ./main.go
 else
-	GOOS=darwin GOARCH=amd64 go build -ldflags "-s -w -X 'lookahead.web.app/cli/internal/version.Version=$$(git describe --abbrev=0 --tags)'" -o ./build/darwin-amd64/look ./main.go
+	GOOS=windows GOARCH=amd64 go build -ldflags "-s -w -X 'lookahead.web.app/cli/internal/version.Version=$(DEV_VER)'" -o ./build/win32-amd64/look.exe ./main.go
 endif
+
 build/linux:
-ifeq (${FIXEDVER},1)
-	GOOS=linux GOARCH=amd64 go build -ldflags "-s -w -X 'lookahead.web.app/cli/internal/version.Version=$(FIXEDVERSION)'" -o ./build/linux-amd64/look ./main.go
+ifeq (${PROD},1)
+ifeq (${RELEASE},1)
+	GOOS=linux GOARCH=amd64 go build -ldflags "-s -w -X 'lookahead.web.app/cli/internal/version.Version=$$(git describe --abbrev=0)'" -o ./build/win32-amd64/look.exe ./main.go
 else
-	GOOS=linux GOARCH=amd64 go build -ldflags "-s -w -X 'lookahead.web.app/cli/internal/version.Version=$$(git describe --abbrev=0 --tags)'" -o ./build/linux-amd64/look ./main.go
+	GOOS=linux GOARCH=amd64 go build -ldflags "-s -w -X 'lookahead.web.app/cli/internal/version.Version=$(DEV_VER)'" -o ./build/win32-amd64/look.exe ./main.go
 endif
+else
+	GOOS=linux GOARCH=amd64 go build -ldflags "-s -w -X 'lookahead.web.app/cli/internal/version.Version=$(DEV_VER)'" -o ./build/win32-amd64/look.exe ./main.go
+endif
+
+build/macos:
+ifeq (${PROD},1)
+ifeq (${RELEASE},1)
+	GOOS=darwin GOARCH=amd64 go build -ldflags "-s -w -X 'lookahead.web.app/cli/internal/version.Version=$$(git describe --abbrev=0)'" -o ./build/win32-amd64/look.exe ./main.go
+else
+	GOOS=darwin GOARCH=amd64 go build -ldflags "-s -w -X 'lookahead.web.app/cli/internal/version.Version=$(DEV_VER)'" -o ./build/win32-amd64/look.exe ./main.go
+endif
+else
+	GOOS=darwin GOARCH=amd64 go build -ldflags "-s -w -X 'lookahead.web.app/cli/internal/version.Version=$(DEV_VER)'" -o ./build/win32-amd64/look.exe ./main.go
+endif
+
 archive:
 	go run scripts/archive/archive.go
 clean:
