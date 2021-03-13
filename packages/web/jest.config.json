@@ -1,6 +1,0 @@
-{
-  "transform": {
-    "^.+\\.tsx?$": "esbuild-jest"
-  },
-  "testPathIgnorePatterns": ["/node_modules/", "/cypress/"]
-}
