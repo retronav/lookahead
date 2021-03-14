@@ -6,7 +6,7 @@
     "start": "snowpack dev --quiet",
     "build": "snowpack build",
     "deploy:dev": "firebase hosting:channel:deploy --only dev exp",
-    "test": "echo \"This template does not include a test runner by default.\" && exit 1",
+    "test": "echo \"Tests TBD\"",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "prettier --check \"src/**/*.ts\""
   },

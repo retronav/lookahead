@@ -15,6 +15,7 @@ import type { Todo } from './app-todo';
 import type { TextArea } from '@material/mwc-textarea';
 import { darken } from 'polished';
 import { getTheme } from '../services/theme';
+import { AppEvents } from '../constants/events';
 
 @customElement('app-todo-dialog')
 export class AppTodoDialog extends LitElement {
@@ -82,7 +83,7 @@ export class AppTodoDialog extends LitElement {
   constructor() {
     super();
     this.addEventListener(
-      'openEditTodoDialog',
+      AppEvents.OPEN_EDIT_TODO_DIALOG,
       this.handleEvent.bind(this) as EventListener,
     );
   }

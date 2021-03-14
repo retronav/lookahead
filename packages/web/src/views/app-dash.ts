@@ -1,16 +1,5 @@
-import {
-  collection,
-  enableMultiTabIndexedDbPersistence,
-  getDocs,
-  onSnapshot,
-} from 'firebase/firestore';
-import {
-  customElement,
-  html,
-  internalProperty,
-  LitElement,
-  query,
-} from 'lit-element';
+import { collection, getDocs, onSnapshot } from 'firebase/firestore';
+import { customElement, html, internalProperty, LitElement } from 'lit-element';
 import '../components/app-todo';
 import { until } from 'lit-html/directives/until';
 import { auth, db } from '../services/firebase';
@@ -18,12 +7,7 @@ import type { Todo } from '../components/app-todo';
 import { getCurrentUser } from '../services/firebase/methods';
 import { Router } from '@vaadin/router';
 import '../components/app-todo-dialog';
-
-declare global {
-  interface Window {
-    __todos: Todo[];
-  }
-}
+import '../components/app-snackbar';
 
 interface TodoDoc {
   title: string;
@@ -39,7 +23,6 @@ export class AppDash extends LitElement {
   todos: Todo[] = [];
   constructor() {
     super();
-    enableMultiTabIndexedDbPersistence(db);
   }
   renderTodos(todos: Todo[]) {
     return html`
@@ -83,6 +66,7 @@ export class AppDash extends LitElement {
         html`<p>Loading todos...</p>`,
       )}
       <app-todo-dialog></app-todo-dialog>
+      <app-snackbar></app-snackbar>
     `;
   }
 }
