@@ -4,6 +4,7 @@ import {
   html,
   internalProperty,
   LitElement,
+  query,
   unsafeCSS,
 } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
@@ -16,11 +17,14 @@ import type { TextArea } from '@material/mwc-textarea';
 import { darken } from 'polished';
 import { getTheme } from '../services/theme';
 import { AppEvents } from '../constants/events';
+import type { Dialog } from '@material/mwc-dialog';
 
 @customElement('app-todo-dialog')
 export class AppTodoDialog extends LitElement {
-  @internalProperty() data: Todo = { title: '', last_edited: '', id: '' };
-  @internalProperty() shouldOpen = false;
+  /** Initial value of this.data */
+  private initalData: Todo = { title: '', last_edited: '', id: '' };
+  @internalProperty() data: Todo = this.initalData;
+  @query('mwc-dialog') dialogElement!: Dialog;
   static get styles() {
     const surfaceColor = getTheme().textSurface;
     return css`
@@ -52,16 +56,17 @@ export class AppTodoDialog extends LitElement {
   }
   handleEvent(evt: CustomEvent<Todo>) {
     this.data = evt.detail;
-    this.shouldOpen = true;
-    this.requestUpdate('shouldOpen', this.shouldOpen);
+    this.dialogElement.show();
   }
   handleSave() {
     // Required to reset state and be able to open the dialog again
-    this.shouldOpen = false;
+    this.dialogElement.close();
+    this.data = this.initalData;
   }
   handleCancel() {
     // Required to reset state and be able to open the dialog again
-    this.shouldOpen = false;
+    this.dialogElement.close();
+    this.data = this.initalData;
   }
   async resize() {
     const outer = this.shadowRoot!.querySelector('mwc-textarea') as TextArea;
@@ -90,7 +95,6 @@ export class AppTodoDialog extends LitElement {
   render() {
     return html`
       <mwc-dialog
-        ?open=${this.shouldOpen}
         escapeKeyAction=""
         scrimClickAction=""
         heading="Edit todo/note"
