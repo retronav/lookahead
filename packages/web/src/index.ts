@@ -1,8 +1,5 @@
 import './components/app-navbar';
 import { Router } from '@vaadin/router';
-import { setDarkTheme } from './services/theme';
-
-setDarkTheme();
 
 const appRoot = document.querySelector('app-root') as HTMLElement;
 export const router = new Router(appRoot);
