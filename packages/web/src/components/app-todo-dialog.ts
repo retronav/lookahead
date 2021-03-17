@@ -10,10 +10,9 @@ import {
 import { ifDefined } from 'lit-html/directives/if-defined';
 import '@material/mwc-dialog';
 import '@material/mwc-textfield';
-import '@material/mwc-textarea';
+import './app-mwc-textarea';
 import './app-mwc-accent-button';
 import type { Todo } from './app-todo';
-import type { TextArea } from '@material/mwc-textarea';
 import { darken } from 'polished';
 import { getTheme } from '../services/theme';
 import { AppEvents } from '../constants/events';
@@ -37,7 +36,7 @@ export class AppTodoDialog extends LitElement {
         --mdc-dialog-min-width: 75vw;
       }
       mwc-textfield,
-      mwc-textarea {
+      app-mwc-textarea {
         --mdc-text-field-fill-color: var(--mdc-theme-surface, '#FFF');
         --mdc-text-field-ink-color: var(--mdc-theme-on-surface, '#000');
         --mdc-theme-primary: var(--mdc-theme-secondary);
@@ -48,9 +47,6 @@ export class AppTodoDialog extends LitElement {
       }
       mwc-textfield {
         --mdc-typography-subtitle1-font-size: 1.2rem;
-      }
-      mwc-textarea {
-        overflow: visible;
       }
     `;
   }
@@ -67,23 +63,6 @@ export class AppTodoDialog extends LitElement {
     // Required to reset state and be able to open the dialog again
     this.dialogElement.close();
     this.data = this.initalData;
-  }
-  async resize() {
-    const outer = this.shadowRoot!.querySelector('mwc-textarea') as TextArea;
-    const inner = outer.shadowRoot!.querySelector(
-      'textarea',
-    ) as HTMLTextAreaElement;
-    //Awaiting anything after incrementing rows allows to wait for a while
-    //for the numbers to change. Weird but works
-    const waitForRender = Promise.resolve(true);
-    if (inner && outer) {
-      outer.rows = 3;
-      await waitForRender;
-      while (inner.scrollHeight > inner.offsetHeight) {
-        outer.rows = outer.rows + 1;
-        await waitForRender;
-      }
-    }
   }
   constructor() {
     super();
@@ -105,15 +84,14 @@ export class AppTodoDialog extends LitElement {
           value=${this.data.title}
         ></mwc-textfield>
         <br />
-        <mwc-textarea
+        <app-mwc-textarea
           maxLength="512"
           charCounter="external"
           placeholder="Enter content of todo/note"
           type="text"
           id="textarea"
-          @input="${this.resize}"
           value=${ifDefined(this.data.content)}
-        ></mwc-textarea>
+        ></app-mwc-textarea>
         <app-mwc-accent-button
           slot="primaryAction"
           dialogAction="save"
@@ -130,8 +108,5 @@ export class AppTodoDialog extends LitElement {
         </app-mwc-accent-button>
       </mwc-dialog>
     `;
-  }
-  async updated() {
-    await this.resize();
   }
 }
