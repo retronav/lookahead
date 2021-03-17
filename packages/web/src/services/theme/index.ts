@@ -1,3 +1,6 @@
+import { getSettings, setTheme as setSettingsTheme } from '../settings';
+export type ThemeType = 'dark' | 'light';
+
 export interface ThemeOptions {
   /** The theme primary color */
   primary: string;
@@ -123,7 +126,23 @@ export function setLightTheme() {
   setTheme(theme);
 }
 
-export function getThemeType(): 'dark' | 'light' {
+export function getThemeType(): ThemeType | null {
   const surfaceColor = rootElement.style.getPropertyValue(themeMap.surface);
-  return surfaceColor === '#ffffff' ? 'light' : 'dark';
+  if (surfaceColor) return surfaceColor === '#ffffff' ? 'light' : 'dark';
+  else return null;
+}
+
+/**
+ * Set the theme initially, before render.
+ * For usage see components/app-navbar.ts
+ */
+export async function setInitalTheme() {
+  const settings = await getSettings();
+  const theme = await settings.theme;
+  if (!theme) {
+    await setSettingsTheme('dark');
+    setDarkTheme();
+  } else {
+    theme === 'dark' ? setDarkTheme() : setLightTheme();
+  }
 }
