@@ -23,7 +23,6 @@ jobs:
         with:
           path: |
             ${{ steps.yarn-cache-dir-path.outputs.dir }}
-            ${{ github.workspace }}/.next/cache
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
@@ -40,7 +39,7 @@ jobs:
         env:
           FIREBASE_CI_TOKEN: ${{ secrets.FIREBASE_CI_TOKEN }}
       - name: Deploy to Dev build
-        run: yarn workspace @lookahead/web deploy:dev -m "$(git show -s --format=%s)" --token $FIREBASE_CI_TOKEN
+        run: yarn workspace @lookahead/web deploy:dev --token $FIREBASE_CI_TOKEN
         env:
           CI: true
           FIREBASE_CI_TOKEN: ${{ secrets.FIREBASE_CI_TOKEN }}
