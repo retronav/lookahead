@@ -22,7 +22,11 @@
     {
       "target": "prod",
       "public": "packages/web/out",
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
       "headers": [
         {
           "source": "sw.js",
@@ -44,7 +48,11 @@
     {
       "target": "dev",
       "public": "packages/web/build",
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
       "headers": [
         {
           "source": "sw.js",

@@ -5,5 +5,15 @@
   "workspaces": [
     "packages/*"
   ],
-  "private": true
+  "scripts": {
+    "dev:firebase": "firebase emulators:start --only auth,firestore --import=./.dev-data",
+    "dev:api": "yarn workspace @lookahead/functions start",
+    "dev:snowpack": "yarn workspace @lookahead/web start",
+    "dev:web": "yarn run-p dev:firebase dev:snowpack",
+    "dev:cli": "yarn run-p dev:firebase dev:api"
+  },
+  "private": true,
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
 }

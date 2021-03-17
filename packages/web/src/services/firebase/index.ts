@@ -3,11 +3,14 @@ import {
   getAuth,
   setPersistence,
   indexedDBLocalPersistence,
+  useAuthEmulator,
 } from 'firebase/auth';
 import {
   enableMultiTabIndexedDbPersistence,
   getFirestore,
+  useFirestoreEmulator,
 } from 'firebase/firestore';
+import { AppEvents, OpenSnackBarEventDetails } from '../../constants/events';
 
 const config = import.meta.env.SNOWPACK_PUBLIC_FIREBASE_APP_CONFIG
   ? //CI
@@ -29,7 +32,32 @@ const firebaseApp = !getApps().length ? initializeApp(config) : getApp();
 const auth = getAuth(firebaseApp);
 const db = getFirestore(firebaseApp);
 
-enableMultiTabIndexedDbPersistence(db).catch(console.error);
+if (import.meta.env.NODE_ENV !== 'production') {
+  useAuthEmulator(auth, 'http://localhost:9099', { disableWarnings: true });
+  useFirestoreEmulator(db, 'localhost', 8000);
+}
+
+enableMultiTabIndexedDbPersistence(db).catch((error: any) => {
+  let helperText = '';
+  switch (error.code) {
+    case 'failed-precondition':
+      helperText = 'Please close all tabs of this app and reload the page.';
+    case 'unimplemented':
+      helperText = 'Your browser does not support offline mode.';
+    default:
+      helperText = 'There was a problem while starting offline mode.';
+  }
+  const errorEvent = new CustomEvent<OpenSnackBarEventDetails>(
+    AppEvents.OPEN_SNACKBAR,
+    {
+      detail: {
+        label: helperText,
+        buttons: { action: { enabled: false }, enableDismiss: false },
+      },
+    },
+  );
+  window.dispatchEvent(errorEvent);
+});
 setPersistence(auth, indexedDBLocalPersistence);
 
 export { auth, db };
