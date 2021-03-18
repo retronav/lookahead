@@ -18,6 +18,9 @@ export interface ThemeOptions {
   textSurface: string;
   /** Font family string */
   fontFamily: string;
+  buttonDisabledFillColor: string;
+  buttonDisabledTextColor: string;
+  buttonDisabledOutlineColor: string;
 }
 
 const themeMap: ThemeOptions = {
@@ -29,6 +32,9 @@ const themeMap: ThemeOptions = {
   textSecondary: '--mdc-theme-on-secondary',
   textSurface: '--mdc-theme-on-surface',
   fontFamily: '--mdc-typography-font-family',
+  buttonDisabledFillColor: '--mdc-button-disabled-fill-color',
+  buttonDisabledOutlineColor: '--mdc-button-disabled-outline-color',
+  buttonDisabledTextColor: '--mdc-button-disabled-ink-color',
 };
 const rootElement = document.querySelector('html') as HTMLElement;
 
@@ -59,33 +65,14 @@ function setTheme(theme: Partial<ThemeOptions>) {
   }, 200);
 }
 
-interface withColorsOptions {
-  primary: string;
-  secondary?: string;
-  surface?: string;
-  background?: string;
-  textPrimary?: string;
-  textSecondary?: string;
-  textSurface?: string;
-}
+type withColorsOptions = Partial<ThemeOptions> & { primary: string };
 
-export function withColors({
-  primary,
-  secondary,
-  surface,
-  background,
-  textPrimary,
-  textSecondary,
-  textSurface,
-}: withColorsOptions) {
+export function withColors(opts: withColorsOptions) {
   return function (target: Partial<ThemeOptions>) {
-    target.primary = primary;
-    if (secondary) target.secondary = secondary;
-    if (surface) target.surface = surface;
-    if (background) target.background = background;
-    if (textPrimary) target.textPrimary = textPrimary;
-    if (textSecondary) target.textSecondary = textSecondary;
-    if (textSurface) target.textSurface = textSurface;
+    Object.keys(opts).forEach((key) => {
+      //@ts-ignore: String index is allowed in this case
+      if (opts[key]) target[key] = opts[key];
+    });
     return target;
   };
 }
@@ -99,6 +86,9 @@ const baseTheme: ThemeOptions = {
   textPrimary: '#ffffff',
   textSecondary: '#ffffff',
   textSurface: '#000000',
+  buttonDisabledFillColor: '#aaaaaa',
+  buttonDisabledOutlineColor: '#aaaaaa',
+  buttonDisabledTextColor: '#aaaaaa',
 };
 
 export function setDarkTheme() {

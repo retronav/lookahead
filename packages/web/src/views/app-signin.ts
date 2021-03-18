@@ -1,4 +1,7 @@
-import { isSignInWithEmailLink } from 'firebase/auth';
+import {
+  isSignInWithEmailLink,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
 import { customElement, html, internalProperty, LitElement } from 'lit-element';
 import { auth } from '../services/firebase';
 import {
@@ -6,10 +9,14 @@ import {
   signInWithEmailLink,
 } from '../services/firebase/methods';
 import { until } from 'lit-html/directives/until';
+import { textFieldAndTextAreaColors } from '../styles';
+import '@material/mwc-textfield';
+import '../components/app-mwc-accent-button';
 
 @customElement('app-signin')
 export class AppSignIn extends LitElement {
   @internalProperty() email = '';
+  static styles = [textFieldAndTextAreaColors];
   async sendLink() {
     try {
       await sendSignInLinkEmail(this.email);
@@ -25,6 +32,13 @@ export class AppSignIn extends LitElement {
   handleEmailInput(e: Event) {
     this.email = (e.target as HTMLInputElement).value;
   }
+  private async signInAsTestBot() {
+    await signInWithEmailAndPassword(
+      auth,
+      'clark@lookahead.web.app',
+      'l00kahead',
+    );
+  }
   render() {
     if (isSignInWithEmailLink(auth, window.location.href)) {
       const userSignedInTmpl = signInWithEmailLink()
@@ -32,7 +46,7 @@ export class AppSignIn extends LitElement {
           user
             ? html`<h1>
                 Logged in! Welcome, ${user.displayName}. You can now use the
-                <a href="/">app</a>.
+                <a href="/app">app</a>.
               </h1>`
             : html`<h1>Couldn't log you in</h1>`,
         )
@@ -42,14 +56,31 @@ export class AppSignIn extends LitElement {
       return html`
         <h1>Sign In to Lookahead</h1>
 
+        ${import.meta.env.NODE_ENV !== 'production'
+          ? html`
+              <app-mwc-accent-button
+                @click=${this.signInAsTestBot}
+                outlined
+                label="Sign in as test bot"
+              ></app-mwc-accent-button>
+            `
+          : html``}
         <h2>Sign in with Email</h2>
-        <input
+        <mwc-textfield
           type="text"
           placeholder="Type your email"
-          @change=${this.handleEmailInput}
+          @input=${this.handleEmailInput}
           value="${this.email}"
-        />
-        <button @click=${this.sendLink}>Sign in</button>
+        ></mwc-textfield>
+        <br />
+        <br />
+        <app-mwc-accent-button
+          outlined
+          ?disabled=${!this.email}
+          @click=${this.sendLink}
+        >
+          Sign in
+        </app-mwc-accent-button>
       `;
     }
   }
