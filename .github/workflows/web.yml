@@ -2,7 +2,7 @@ name: Lookahead Web App
 
 on:
   push:
-    paths: ["packages/web/**"]
+    paths: ["packages/web/**", ".github/workflows/web.yml"]
 
 jobs:
   build:
