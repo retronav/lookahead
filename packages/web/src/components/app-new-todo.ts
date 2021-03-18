@@ -3,28 +3,29 @@ import {
   html,
   LitElement,
   css,
-  unsafeCSS,
   queryAsync,
   internalProperty,
 } from 'lit-element';
 import '@material/mwc-textfield';
 import './app-mwc-textarea';
 import './app-mwc-accent-button';
-import { getTheme } from '../services/theme';
-import { darken } from 'polished';
 import { style as elevationStyle } from '@material/mwc-elevation-overlay/mwc-elevation-overlay-css';
 import type { TextField } from '@material/mwc-textfield';
 import type { AppTextArea } from './app-mwc-textarea';
+import { textFieldAndTextAreaColors } from '../styles';
+import type { AppAccentButton } from './app-mwc-accent-button';
 
 @customElement('app-new-todo')
 export class AppNewTodo extends LitElement {
   @queryAsync('mwc-textfield') textField!: Promise<TextField>;
   @queryAsync('app-mwc-textarea') textArea!: Promise<AppTextArea>;
   @queryAsync('.fallable') fallableSection!: Promise<HTMLElement>;
+  @queryAsync('.cancel-button') cancelButton!: Promise<AppAccentButton>;
   @internalProperty() shouldCollapse = true;
   static get styles() {
     return [
       elevationStyle,
+      textFieldAndTextAreaColors,
       css`
         .wrapper {
           border: 1px solid var(--mdc-theme-on-surface, '#FFF');
@@ -46,15 +47,6 @@ export class AppNewTodo extends LitElement {
           width: 96%;
           padding: 0 2%;
         }
-        mwc-textfield,
-        app-mwc-textarea {
-          --mdc-text-field-fill-color: transparent;
-          --mdc-text-field-ink-color: var(--mdc-theme-on-surface, '#000');
-          --mdc-theme-primary: var(--mdc-theme-secondary);
-          --mdc-text-field-label-ink-color: ${unsafeCSS(
-            darken(0.4)(getTheme().textSurface || '#000'),
-          )};
-        }
         mwc-textfield {
           --mdc-typography-subtitle1-font-size: 1.2rem;
           width: 96%;
@@ -62,9 +54,6 @@ export class AppNewTodo extends LitElement {
         }
         app-mwc-textarea {
           width: 100%;
-        }
-        mwc-button.error {
-          --mdc-theme-primary: #b00020;
         }
       `,
     ];
@@ -78,7 +67,9 @@ export class AppNewTodo extends LitElement {
   }
   connectedCallback() {
     super.connectedCallback();
-    document.addEventListener('click', (evt) => {
+    document.addEventListener('click', async (evt) => {
+      if (evt.composedPath().includes(await this.cancelButton))
+        this.hideCollapsible();
       if (!evt.composedPath().includes(this)) this.hideCollapsible();
     });
   }
@@ -101,10 +92,13 @@ export class AppNewTodo extends LitElement {
           ></app-mwc-textarea>
           <div style="text-align: center;">
             <app-mwc-accent-button
+              class="save-button"
               label="Save"
               outlined
             ></app-mwc-accent-button>
             <app-mwc-accent-button
+              class="cancel-button"
+              @click=${this.hideCollapsible}
               label="Cancel"
               outlined
             ></app-mwc-accent-button>
