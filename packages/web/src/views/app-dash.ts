@@ -77,7 +77,6 @@ export class AppDash extends LitElement {
         )}
       </ul>
       <app-todo-dialog></app-todo-dialog>
-      <app-snackbar></app-snackbar>
     `;
   }
 }

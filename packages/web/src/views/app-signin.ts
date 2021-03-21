@@ -12,6 +12,7 @@ import { until } from 'lit-html/directives/until';
 import { textFieldAndTextAreaColors } from '../styles';
 import '@material/mwc-textfield';
 import '../components/app-mwc-accent-button';
+import { Router } from '@vaadin/router';
 
 @customElement('app-signin')
 export class AppSignIn extends LitElement {
@@ -38,6 +39,7 @@ export class AppSignIn extends LitElement {
       'clark@lookahead.web.app',
       'l00kahead',
     );
+    Router.go('/app');
   }
   render() {
     if (isSignInWithEmailLink(auth, window.location.href)) {
