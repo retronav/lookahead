@@ -15,7 +15,7 @@ import './app-mwc-accent-button';
 import type { Todo } from './app-todo';
 import { darken } from 'polished';
 import { getTheme } from '../services/theme';
-import { AppEvents } from '../constants/events';
+import { AppEvents } from '../services/events/events';
 import type { Dialog } from '@material/mwc-dialog';
 
 @customElement('app-todo-dialog')
@@ -93,6 +93,7 @@ export class AppTodoDialog extends LitElement {
           value=${ifDefined(this.data.content)}
         ></app-mwc-textarea>
         <app-mwc-accent-button
+          outlined
           slot="primaryAction"
           dialogAction="save"
           @click=${this.handleSave}
@@ -100,6 +101,7 @@ export class AppTodoDialog extends LitElement {
         >
         </app-mwc-accent-button>
         <app-mwc-accent-button
+          outlined
           slot="secondaryAction"
           dialogAction="cancel"
           @click=${this.handleCancel}

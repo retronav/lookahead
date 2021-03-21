@@ -10,7 +10,8 @@ import {
   getFirestore,
   useFirestoreEmulator,
 } from 'firebase/firestore';
-import { AppEvents, OpenSnackBarEventDetails } from '../../constants/events';
+import { AppEvents, OpenSnackBarEventDetails } from '../events/events';
+import { emitCustomEvent } from '../events';
 
 const config = import.meta.env.SNOWPACK_PUBLIC_FIREBASE_APP_CONFIG
   ? //CI
@@ -47,16 +48,10 @@ enableMultiTabIndexedDbPersistence(db).catch((error: any) => {
     default:
       helperText = 'There was a problem while starting offline mode.';
   }
-  const errorEvent = new CustomEvent<OpenSnackBarEventDetails>(
-    AppEvents.OPEN_SNACKBAR,
-    {
-      detail: {
-        label: helperText,
-        buttons: { action: { enabled: false }, enableDismiss: false },
-      },
-    },
-  );
-  window.dispatchEvent(errorEvent);
+  emitCustomEvent<OpenSnackBarEventDetails>(AppEvents.OPEN_SNACKBAR, {
+    label: helperText,
+    buttons: { action: { enabled: false }, enableDismiss: false },
+  });
 });
 setPersistence(auth, indexedDBLocalPersistence);
 
