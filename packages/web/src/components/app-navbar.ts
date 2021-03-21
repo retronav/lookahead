@@ -1,12 +1,14 @@
 import '@material/mwc-top-app-bar-fixed';
 import '@material/mwc-button';
 import '@material/mwc-icon-button';
+import './app-user-info-dialog';
 import {
   css,
   customElement,
   html,
   internalProperty,
   LitElement,
+  query,
 } from 'lit-element';
 import { Router } from '@vaadin/router';
 import {
@@ -21,10 +23,28 @@ import {
 } from '../services/settings';
 import { until } from 'lit-html/directives/until';
 import { setInitalTheme } from '../services/theme';
+import { emitCustomEvent } from '../services/events';
+import { AppEvents } from '../services/events/events';
+import type { AppUserInfoDialog } from './app-user-info-dialog';
 
 @customElement('app-navbar')
 export class AppNavbar extends LitElement {
   @internalProperty() themeType = getThemeType();
+  @query('app-user-info-dialog') userDialog!: AppUserInfoDialog;
+  static get styles() {
+    return css`
+      @media (max-width: 599px) {
+        .top-app-bar-spacer {
+          height: 56px;
+        }
+      }
+      .top-app-bar-spacer {
+        display: block;
+        width: 100vw;
+        height: 64px;
+      }
+    `;
+  }
   goToHomePage() {
     Router.go('/');
   }
@@ -52,19 +72,8 @@ export class AppNavbar extends LitElement {
     }
     return this.themeToggler(this.themeType) + '_mode';
   }
-  static get styles() {
-    return css`
-      @media (max-width: 599px) {
-        .top-app-bar-spacer {
-          height: 56px;
-        }
-      }
-      .top-app-bar-spacer {
-        display: block;
-        width: 100vw;
-        height: 64px;
-      }
-    `;
+  openUserDialog() {
+    emitCustomEvent(AppEvents.OPEN_USER_DIALOG, null, this.userDialog);
   }
   render() {
     return until(
@@ -85,8 +94,13 @@ export class AppNavbar extends LitElement {
                 icon=${until(this.getThemeToggleName(), '')}
               >
               </mwc-icon-button>
+              <mwc-icon-button
+                @click=${this.openUserDialog}
+                icon="account_circle"
+              ></mwc-icon-button>
             </div>
           </mwc-top-app-bar-fixed>
+          <app-user-info-dialog></app-user-info-dialog>
         `,
       ),
       html`<div class="top-app-bar-spacer" role="presentation"></div>`,
