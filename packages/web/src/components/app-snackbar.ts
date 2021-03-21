@@ -9,7 +9,7 @@ import {
 import '@material/mwc-snackbar';
 import '@material/mwc-button';
 import '@material/mwc-icon-button';
-import { AppEvents, OpenSnackBarEventDetails } from '../constants/events';
+import { AppEvents, OpenSnackBarEventDetails } from '../services/events/events';
 import type { Snackbar } from '@material/mwc-snackbar';
 
 @customElement('app-snackbar')

@@ -11,6 +11,10 @@ export enum AppEvents {
    * Event name for opening a snackbar
    */
   OPEN_SNACKBAR = 'openSnackbar',
+  /**
+   * Event name for opening the user information dialog
+   */
+  OPEN_USER_DIALOG = 'openUserDialog',
 }
 
 /**

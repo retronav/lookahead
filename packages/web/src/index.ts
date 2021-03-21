@@ -1,4 +1,5 @@
 import './components/app-navbar';
+import './components/app-snackbar';
 import { Router } from '@vaadin/router';
 import type { AppHome } from './views/app-home';
 import type { AppSignIn } from './views/app-signin';
