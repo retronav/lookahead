@@ -1,6 +1,4 @@
-import { css, unsafeCSS } from 'lit-element';
-import { darken } from 'polished';
-import { getTheme } from '../services/theme';
+import { css } from 'lit-element';
 
 export const textFieldAndTextAreaColors = css`
   mwc-textfield,
@@ -8,8 +6,6 @@ export const textFieldAndTextAreaColors = css`
     --mdc-text-field-fill-color: transparent;
     --mdc-text-field-ink-color: var(--mdc-theme-on-surface, '#000');
     --mdc-theme-primary: var(--mdc-theme-secondary);
-    --mdc-text-field-label-ink-color: ${unsafeCSS(
-      darken(0.4)(getTheme().textSurface || '#000'),
-    )};
+    --mdc-text-field-label-ink-color: #999999;
   }
 `;
