@@ -1,15 +1,19 @@
 @import url('./material-icons.css');
-@font-face {
-  font-family: 'Fira Sans';
-  src: url(./fonts/fira-sans-all-400-normal.woff) format('woff');
-  font-display: swap;
+@import url('https://rsms.me/inter/inter.css');
+html {
+  font-family: 'Inter', sans-serif;
+}
+@supports (font-variation-settings: normal) {
+  html {
+    font-family: 'Inter var', sans-serif;
+  }
 }
 
-::-webkit-scrollbar {
+html::-webkit-scrollbar {
   width: 1em;
   scrollbar-width: thin;
 }
-::-webkit-scrollbar-thumb {
+html::-webkit-scrollbar-thumb {
   background-color: #aaa;
   border-radius: 6px;
   border: 0.2em solid var(--mdc-theme-surface, '#000000');
@@ -17,9 +21,6 @@
 
 body {
   min-height: 100vh;
-  font-family: 'Fira Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-    'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
   margin: 0;
   padding: 0;
   background-color: var(--mdc-theme-surface, '#ffffff');
