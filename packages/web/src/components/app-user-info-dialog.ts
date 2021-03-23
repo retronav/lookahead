@@ -48,6 +48,10 @@ export class AppUserInfoDialog extends LitElement {
   handleEvent() {
     this.dialogElement.show();
   }
+  handleEditProfile() {
+    this.dialogElement.close();
+    alert('TBD!!');
+  }
   render() {
     const dialogContent = (user: User | null) =>
       user
@@ -58,7 +62,11 @@ export class AppUserInfoDialog extends LitElement {
                 : html`<mwc-icon>account_circle</mwc-icon>`}
               <h2>${user.displayName}</h2>
             </div>
-            <app-mwc-accent-button outlined slot="primaryAction">
+            <app-mwc-accent-button
+              @click=${this.handleEditProfile}
+              outlined
+              slot="primaryAction"
+            >
               Edit
             </app-mwc-accent-button>
           `

@@ -26,10 +26,13 @@ import { setInitalTheme } from '../services/theme';
 import { emitCustomEvent } from '../services/events';
 import { AppEvents } from '../services/events/events';
 import type { AppUserInfoDialog } from './app-user-info-dialog';
+import { auth } from '../services/firebase';
+import { ifDefined } from 'lit-html/directives/if-defined';
 
 @customElement('app-navbar')
 export class AppNavbar extends LitElement {
   @internalProperty() themeType = getThemeType();
+  @internalProperty() user = auth.currentUser;
   @query('app-user-info-dialog') userDialog!: AppUserInfoDialog;
   static get styles() {
     return css`
@@ -43,7 +46,17 @@ export class AppNavbar extends LitElement {
         width: 100vw;
         height: 64px;
       }
+      mwc-icon-button img {
+        border-radius: 50%;
+      }
     `;
+  }
+  constructor() {
+    super();
+    auth.onAuthStateChanged((user) => {
+      if (user) this.user = user;
+      this.requestUpdate();
+    });
   }
   goToHomePage() {
     Router.go('/');
@@ -95,9 +108,20 @@ export class AppNavbar extends LitElement {
               >
               </mwc-icon-button>
               <mwc-icon-button
+                icon=${ifDefined(
+                  this.user && this.user.photoURL
+                    ? undefined
+                    : 'account_circle',
+                )}
                 @click=${this.openUserDialog}
-                icon="account_circle"
-              ></mwc-icon-button>
+              >
+                ${this.user && this.user.photoURL
+                  ? html`<img
+                      src=${this.user.photoURL}
+                      alt="Profile picture"
+                    />`
+                  : html``}
+              </mwc-icon-button>
             </div>
           </mwc-top-app-bar-fixed>
           <app-user-info-dialog></app-user-info-dialog>
