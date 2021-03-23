@@ -4,10 +4,7 @@ import {
 } from 'firebase/auth';
 import { customElement, html, internalProperty, LitElement } from 'lit-element';
 import { auth } from '../services/firebase';
-import {
-  sendSignInLinkEmail,
-  signInWithEmailLink,
-} from '../services/firebase/methods';
+import { AuthMethods } from '../services/firebase/methods';
 import { until } from 'lit-html/directives/until';
 import { textFieldAndTextAreaColors } from '../styles';
 import '@material/mwc-textfield';
@@ -20,7 +17,7 @@ export class AppSignIn extends LitElement {
   static styles = [textFieldAndTextAreaColors];
   async sendLink() {
     try {
-      await sendSignInLinkEmail(this.email);
+      await AuthMethods.sendSignInLinkEmail(this.email);
       alert('A link has been sent to your email. Use it to sign in');
     } catch (error) {
       alert(
@@ -43,7 +40,7 @@ export class AppSignIn extends LitElement {
   }
   render() {
     if (isSignInWithEmailLink(auth, window.location.href)) {
-      const userSignedInTmpl = signInWithEmailLink()
+      const userSignedInTmpl = AuthMethods.signInWithEmailLink()
         .then((user) =>
           user
             ? html`<h1>

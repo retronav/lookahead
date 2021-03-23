@@ -10,7 +10,7 @@ import '../components/app-todo';
 import { until } from 'lit-html/directives/until';
 import { auth, db } from '../services/firebase';
 import type { Todo } from '../components/app-todo';
-import { getCurrentUser } from '../services/firebase/methods';
+import { AuthMethods } from '../services/firebase/methods';
 import { Router } from '@vaadin/router';
 import '../components/app-new-todo';
 import '../components/app-todo-dialog';
@@ -65,7 +65,7 @@ export class AppDash extends LitElement {
       <app-new-todo></app-new-todo>
       <ul class="todos">
         ${until(
-          getCurrentUser().then((user) =>
+          AuthMethods.getCurrentUser().then((user) =>
             user
               ? this.getTodos()
                   .then((todos) => this.renderTodos(todos ?? this.todos))
