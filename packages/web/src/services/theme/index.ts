@@ -78,7 +78,7 @@ export function withColors(opts: withColorsOptions) {
 }
 
 const baseTheme: ThemeOptions = {
-  fontFamily: `Fira Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Droid Sans', 'Helvetica Neue', sans-serif`,
+  fontFamily: `Inter var', sans-serif`,
   primary: '#6200ee',
   secondary: '#018786',
   surface: '#ffffff',
