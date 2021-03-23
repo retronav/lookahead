@@ -3,10 +3,11 @@ import '@material/mwc-textarea';
 import { TextAreaBase } from '@material/mwc-textarea/mwc-textarea-base';
 import { style as TextAreaStyles } from '@material/mwc-textarea/mwc-textarea-css';
 import { style as TextfieldStyles } from '@material/mwc-textfield/mwc-textfield-css';
+import { textFieldAndTextAreaColors } from '../styles';
 
 @customElement('app-mwc-textarea')
 export class AppTextArea extends TextAreaBase {
-  static styles = [TextfieldStyles, TextAreaStyles];
+  static styles = [TextfieldStyles, TextAreaStyles, textFieldAndTextAreaColors];
   async resize() {
     const inner = this.shadowRoot!.querySelector(
       'textarea',

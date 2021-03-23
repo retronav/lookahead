@@ -5,7 +5,6 @@ import {
   internalProperty,
   LitElement,
   query,
-  unsafeCSS,
 } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import '@material/mwc-dialog';
@@ -13,10 +12,9 @@ import '@material/mwc-textfield';
 import './app-mwc-textarea';
 import './app-mwc-accent-button';
 import type { Todo } from './app-todo';
-import { darken } from 'polished';
-import { getTheme } from '../services/theme';
 import { AppEvents } from '../services/events/events';
 import type { Dialog } from '@material/mwc-dialog';
+import { textFieldAndTextAreaColors } from '../styles';
 
 @customElement('app-todo-dialog')
 export class AppTodoDialog extends LitElement {
@@ -24,9 +22,9 @@ export class AppTodoDialog extends LitElement {
   private initalData: Todo = { title: '', last_edited: '', id: '' };
   @internalProperty() data: Todo = this.initalData;
   @query('mwc-dialog') dialogElement!: Dialog;
-  static get styles() {
-    const surfaceColor = getTheme().textSurface;
-    return css`
+  static styles = [
+    textFieldAndTextAreaColors,
+    css`
       mwc-dialog * {
         color: var(--mdc-theme-on-surface, '#000');
       }
@@ -37,19 +35,13 @@ export class AppTodoDialog extends LitElement {
       }
       mwc-textfield,
       app-mwc-textarea {
-        --mdc-text-field-fill-color: var(--mdc-theme-surface, '#FFF');
-        --mdc-text-field-ink-color: var(--mdc-theme-on-surface, '#000');
-        --mdc-theme-primary: var(--mdc-theme-secondary);
-        --mdc-text-field-label-ink-color: ${unsafeCSS(
-          darken(0.4)(surfaceColor || '#000'),
-        )};
         width: 90%;
       }
       mwc-textfield {
         --mdc-typography-subtitle1-font-size: 1.2rem;
       }
-    `;
-  }
+    `,
+  ];
   handleEvent(evt: CustomEvent<Todo>) {
     this.data = evt.detail;
     this.dialogElement.show();
