@@ -6,6 +6,17 @@ import type { AppSignIn } from './views/app-signin';
 import type { AppDash } from './views/app-dash';
 import type { App404 } from './views/app-404';
 
+// Import meta declarations
+declare global {
+  interface ImportMeta {
+    env: {
+      DEV: boolean;
+      PROD: boolean;
+      [x: string]: any;
+    };
+  }
+}
+
 const appRoot = document.querySelector('app-root') as HTMLElement;
 export const router = new Router(appRoot);
 

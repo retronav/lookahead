@@ -55,7 +55,7 @@ export class AppSignIn extends LitElement {
       return html`
         <h1>Sign In to Lookahead</h1>
 
-        ${import.meta.env.NODE_ENV !== 'production'
+        ${import.meta.env.MODE !== 'production'
           ? html`
               <app-mwc-accent-button
                 @click=${this.signInAsTestBot}

@@ -33,7 +33,7 @@ jobs:
       - name: Build the app
         run: yarn workspace @lookahead/web build
         env:
-          SNOWPACK_PUBLIC_FIREBASE_APP_CONFIG: ${{ secrets.FIREBASE_APP_CONFIG }}
+          VITE_FIREBASE_APP_CONFIG: ${{ secrets.FIREBASE_APP_CONFIG }}
       - name: Run tests
         run: yarn workspace @lookahead/web test
         env:

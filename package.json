@@ -8,8 +8,8 @@
   "scripts": {
     "dev:firebase": "firebase emulators:start --only auth,firestore --import=./.dev-data",
     "dev:api": "yarn workspace @lookahead/functions start",
-    "dev:snowpack": "yarn workspace @lookahead/web start",
-    "dev:web": "yarn run-p dev:firebase dev:snowpack",
+    "dev:vite": "yarn workspace @lookahead/web start",
+    "dev:web": "yarn run-p dev:firebase dev:vite",
     "dev:cli": "yarn run-p dev:firebase dev:api"
   },
   "private": true,

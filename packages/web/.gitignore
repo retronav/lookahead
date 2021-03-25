@@ -1,4 +1,6 @@
-.snowpack
+.DS_Store
+.firebase
 build
 node_modules
-.firebase
+types
+*.local

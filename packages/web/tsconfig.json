@@ -1,11 +1,10 @@
 {
-  "include": ["src", "types"],
+  "include": ["src", "./src/types.d.ts"],
   "compilerOptions": {
     "module": "esnext",
     "target": "esnext",
     "moduleResolution": "node",
     "jsx": "preserve",
-    /* noEmit - Snowpack builds (emits) files, not tsc. */
     "noEmit": true,
     /* LitElement - Add decorator support! */
     "experimentalDecorators": true,
