@@ -12,7 +12,7 @@ import (
 //Edit A monolithic function to edit todos/notes
 func Edit(id string, shouldEditContent bool) {
 	//Check if ID really exists
-	exists := store.Store.IdExists(id)
+	exists := store.Store.IDExists(id)
 	if !exists {
 		logging.Error(1, "ID not found! Please check that ID again!")
 	}

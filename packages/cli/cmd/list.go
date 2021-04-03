@@ -41,7 +41,7 @@ func getLastPathOfDocId(docId string) string {
 }
 
 func printWholeTodo(todo types.DataSchema) {
-	fmt.Println("Todo id:", getLastPathOfDocId(todo.Id))
+	fmt.Println("Todo id:", getLastPathOfDocId(todo.ID))
 	color.HiCyan(todo.Title)
 	if !checkStringEmptyOrOnlySpaces(todo.Content) {
 		fmt.Println(todo.Content)

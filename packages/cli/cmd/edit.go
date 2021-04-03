@@ -32,7 +32,7 @@ var editCmd = &cobra.Command{
 			logging.Error(1, "You should be logged in to run this command!!"+
 				" Use `look login` to login")
 		}
-		id := actions.Find().Id
+		id := actions.Find().ID
 		shouldEditContent, _ := cmd.Flags().GetBool("content")
 		actions.Edit(id, shouldEditContent)
 	},

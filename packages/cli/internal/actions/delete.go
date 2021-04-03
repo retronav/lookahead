@@ -11,7 +11,7 @@ func Delete(id string) {
 	//Confirm if really want to delete
 	wantsToDelete := input.Confirm("Do you really want to delete it?")
 	//Check if ID really exists
-	exists := store.Store.IdExists(id)
+	exists := store.Store.IDExists(id)
 	if !exists {
 		logging.Error(1, "ID not found! Please check that ID again!")
 	}

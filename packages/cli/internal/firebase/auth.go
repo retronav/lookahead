@@ -3,7 +3,7 @@ package firebase
 import (
 	"bytes"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"os"
@@ -50,7 +50,7 @@ func (a authImpl) UpdateIdToken() {
 		s.Stop()
 		return
 	}
-	resBody, _ := ioutil.ReadAll(res.Body)
+	resBody, _ := io.ReadAll(res.Body)
 	var resBodyJSON updateIdTokenRes
 	json.Unmarshal(resBody, &resBodyJSON)
 	newCreds.IdToken = resBodyJSON.IdToken
@@ -65,7 +65,7 @@ func (a authImpl) UpdateIdToken() {
 func (a authImpl) SendEmailRequest(email string, identityKey string) bool {
 	reqBody, _ := json.Marshal(map[string]string{"email": email, "identityKey": identityKey})
 	reqHeaders := map[string]string{"Content-Type": "application/json"}
-	res, err := internalHttp.Post(types.Endpoints.SEND_EMAIL_LINK, reqHeaders, bytes.NewReader(reqBody))
+	res, err := internalHttp.Post(types.Endpoints.SendEmailLink, reqHeaders, bytes.NewReader(reqBody))
 	if err != nil {
 		color.HiRed("Some error happened %s", err)
 		os.Exit(1)
@@ -80,7 +80,7 @@ func (a authImpl) GetLoginTokens(email string, identityKey string) credential.Cr
 	time.Sleep(1500 * time.Millisecond)
 	reqBody, _ := json.Marshal(map[string]string{"email": email, "identityKey": identityKey})
 	reqHeaders := map[string]string{"Content-Type": "application/json"}
-	res, err := internalHttp.Post(types.Endpoints.GET_LOGIN_TOKEN, reqHeaders, bytes.NewReader(reqBody))
+	res, err := internalHttp.Post(types.Endpoints.GetLoginToken, reqHeaders, bytes.NewReader(reqBody))
 	if err != nil {
 		logging.Error(1, err.Error())
 	}

@@ -3,7 +3,6 @@ package store
 import (
 	"encoding/json"
 	"errors"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -22,6 +21,7 @@ type storeStruct struct {
 	storeLoc        string
 }
 
+//lint:ignore U1000 its not ignored by the way
 type storeInterface interface {
 	Append(id string, title string, content string) (bool, error)
 	Delete(id string) (bool, error)
@@ -36,18 +36,18 @@ type storeInterface interface {
 func (s storeStruct) Append(title string, content string) (bool, error) {
 	isOffline := false
 	existingJSON, _ := s.GetAll()
-	newId := util.GenerateDocID()
-	if s.IdExists(newId) {
-		newId = util.GenerateDocID()
+	newID := util.GenerateDocID()
+	if s.IDExists(newID) {
+		newID = util.GenerateDocID()
 	}
 	data := types.DataSchema{
-		Id:         newId,
+		ID:         newID,
 		Title:      title,
 		Content:    content,
 		LastEdited: util.MakeCurrDate(),
 	}
 	if util.IsOnline() {
-		err := rest.RestClient.Set(data.Id, title, content, data.LastEdited)
+		err := rest.RestClient.Set(data.ID, title, content, data.LastEdited)
 		if err != nil {
 			return isOffline, err
 		}
@@ -58,19 +58,19 @@ func (s storeStruct) Append(title string, content string) (bool, error) {
 	existingJSON = append(existingJSON, data)
 	toWrite, err := json.Marshal(existingJSON)
 	if err != nil {
-		return isOffline, errors.New("There was an error while adding values to the store. Please try again")
+		return isOffline, errors.New("there was an error while adding values to the store. Please try again")
 	}
-	err = ioutil.WriteFile(s.storeLoc, []byte(toWrite), s.filePermissions)
+	err = os.WriteFile(s.storeLoc, []byte(toWrite), s.filePermissions)
 	if err != nil {
-		return isOffline, errors.New("Couldn't write data to local data store. Please try again")
+		return isOffline, errors.New("couldn't write data to local data store. Please try again")
 	}
 	return isOffline, nil
 }
 func (s storeStruct) Delete(id string) (bool, error) {
-	if s.IdExists(id) {
+	if s.IDExists(id) {
 		err := rest.RestClient.Delete(id)
 		if err != nil {
-			return false, errors.New("There was an error while deleting from the database. Please try again later.")
+			return false, errors.New("there was an error while deleting from the database. Please try again later")
 		}
 		s.Sync(true)
 		return true, nil
@@ -78,13 +78,13 @@ func (s storeStruct) Delete(id string) (bool, error) {
 	return false, errors.New("ID Not found")
 }
 func (s storeStruct) Get(id string) (types.DataSchema, error) {
-	if s.IdExists(id) {
+	if s.IDExists(id) {
 		all, err := s.GetAll()
 		if err != nil {
 			return types.DataSchema{}, err
 		}
 		for _, todo := range all {
-			if todo.Id == id {
+			if todo.ID == id {
 				return todo, nil
 			}
 		}
@@ -95,19 +95,19 @@ func (s storeStruct) Get(id string) (types.DataSchema, error) {
 //GetAll Gets all values from the local store
 func (s storeStruct) GetAll() ([]types.DataSchema, error) {
 	if _, err := os.Stat(s.storeLoc); err == nil {
-		content, _ := ioutil.ReadFile(s.storeLoc)
+		content, _ := os.ReadFile(s.storeLoc)
 		storeJSON := []types.DataSchema{}
 		json.Unmarshal(content, &storeJSON)
 		return storeJSON, nil
 	}
-	return nil, errors.New("Couldn't access local data store. Please try again")
+	return nil, errors.New("couldn't access local data store. Please try again")
 }
 
-func (s storeStruct) IdExists(id string) bool {
+func (s storeStruct) IDExists(id string) bool {
 	data, _ := s.GetAll()
 	found := false
 	for _, item := range data {
-		if item.Id == id {
+		if item.ID == id {
 			found = true
 		}
 	}
@@ -119,7 +119,7 @@ func (s storeStruct) Update(id string, title string, content string) (bool, erro
 	isOffline := false
 	existingJSON, _ := s.GetAll()
 	data := types.DataSchema{
-		Id:         id,
+		ID:         id,
 		Title:      title,
 		Content:    content,
 		LastEdited: util.MakeCurrDate(),
@@ -127,7 +127,7 @@ func (s storeStruct) Update(id string, title string, content string) (bool, erro
 	//Keep track of mutation
 	mutated := false
 	for i, item := range existingJSON {
-		if item.Id == data.Id {
+		if item.ID == data.ID {
 			existingJSON[i] = data
 			mutated = true
 		}
@@ -137,11 +137,11 @@ func (s storeStruct) Update(id string, title string, content string) (bool, erro
 	} else {
 		toWrite, err := json.Marshal(existingJSON)
 		if err != nil {
-			return isOffline, errors.New("There was an error while adding values to the store. Please try again")
+			return isOffline, errors.New("there was an error while adding values to the store. Please try again")
 		}
-		err = ioutil.WriteFile(s.storeLoc, []byte(toWrite), s.filePermissions)
+		err = os.WriteFile(s.storeLoc, []byte(toWrite), s.filePermissions)
 		if err != nil {
-			return isOffline, errors.New("Couldn't write data to local data store. Please try again")
+			return isOffline, errors.New("couldn't write data to local data store. Please try again")
 		}
 		if util.IsOnline() {
 			err = rest.RestClient.Set(id, title, content, data.LastEdited)

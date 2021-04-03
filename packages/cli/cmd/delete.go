@@ -32,7 +32,7 @@ var deleteCmd = &cobra.Command{
 			logging.Error(1, "You should be logged in to run this command!!"+
 				" Use `look login` to login")
 		}
-		id := actions.Find().Id
+		id := actions.Find().ID
 		actions.Delete(id)
 	},
 }

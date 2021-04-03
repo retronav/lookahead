@@ -2,7 +2,6 @@ package http
 
 import (
 	"io"
-	"io/ioutil"
 	"net/http"
 )
 
@@ -11,7 +10,7 @@ func Get(url string) (string, error) {
 	if err != nil {
 		return "", err
 	} else {
-		body, _ := ioutil.ReadAll(res.Body)
+		body, _ := io.ReadAll(res.Body)
 		return string(body), nil
 	}
 }
@@ -26,7 +25,7 @@ func Post(url string, headers map[string]string, body io.Reader) (string, error)
 	if err != nil {
 		return "", err
 	} else {
-		body, _ := ioutil.ReadAll(res.Body)
+		body, _ := io.ReadAll(res.Body)
 		return string(body), nil
 	}
 }

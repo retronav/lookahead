@@ -11,7 +11,7 @@ import (
 type DataSchema struct {
 	Title           string `json:"title"`
 	Content         string `json:"content"`
-	Id              string `json:"id"`
+	ID              string `json:"id"`
 	LastEdited      string `json:"last_edited"`
 	New             bool   `json:"new,omitempty"`
 	LastEditedHuman string `json:"lastEditedHuman,omitempty"`
@@ -20,6 +20,8 @@ type DataSchema struct {
 //TimeFormat The time format used in the CLI to display dates
 var TimeFormat string = "02 Jan, 2006 at 3:04PM"
 
+//ToLastEditedHuman Convert RFC 3339 timestamp to a custom timestamp
+//(see types.TimeFormat)
 func (d DataSchema) ToLastEditedHuman() string {
 	timeObj, _ := time.Parse(time.RFC3339, d.LastEdited)
 	return timeObj.Local().Format(TimeFormat)
@@ -46,11 +48,11 @@ var SecureTokenEndpoint = func() string {
 
 //Endpoints General API URLs used in the CLI for operations
 var Endpoints = struct {
-	SEND_EMAIL_LINK string
-	GET_LOGIN_TOKEN string
-	TODOS           string
+	SendEmailLink string
+	GetLoginToken string
+	Todos         string
 }{
-	SEND_EMAIL_LINK: CLIAPIEndpoint + "/send-email-link",
-	GET_LOGIN_TOKEN: CLIAPIEndpoint + "/get-login-tokens",
-	TODOS:           CLIAPIEndpoint + "/todos",
+	SendEmailLink: CLIAPIEndpoint + "/send-email-link",
+	GetLoginToken: CLIAPIEndpoint + "/get-login-tokens",
+	Todos:         CLIAPIEndpoint + "/todos",
 }

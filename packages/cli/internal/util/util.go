@@ -34,9 +34,9 @@ func GenerateDocID() string {
 	rand.Seed(time.Now().UnixNano())
 	//Alphanumeric characters
 	const chars string = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-	autoId := ""
+	autoID := ""
 	for i := 0; i < 20; i++ {
-		autoId += string(chars[int(rand.Float32()*float32(len(chars)))])
+		autoID += string(chars[int(rand.Float32()*float32(len(chars)))])
 	}
-	return autoId
+	return autoID
 }

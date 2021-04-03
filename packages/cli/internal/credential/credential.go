@@ -2,7 +2,6 @@ package credential
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -36,7 +35,7 @@ func GetCredentialsLocation() string {
 func ReadCredentials() CredentialsStruct {
 	credsLoc := GetCredentialsLocation()
 	if _, err := os.Stat(credsLoc); err == nil {
-		content, err := ioutil.ReadFile(credsLoc)
+		content, err := os.ReadFile(credsLoc)
 		if err != nil {
 			logging.Error(1, "Couldn't read credentials file. Please try again")
 		}
@@ -64,7 +63,7 @@ func WriteCredentials(data CredentialsStruct) error {
 		defer file.Close()
 		return nil
 	} else if err == nil {
-		err := ioutil.WriteFile(credsLoc, dataToWrite, writeCredentialsFilePermissions)
+		err := os.WriteFile(credsLoc, dataToWrite, writeCredentialsFilePermissions)
 		if err != nil {
 			return err
 		}

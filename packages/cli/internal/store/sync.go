@@ -2,7 +2,7 @@ package store
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"os"
 	"sort"
 	"time"
 
@@ -31,6 +31,7 @@ func (s storeStruct) Sync(force bool) {
 		spinner.Start()
 		//The id token with the restClient might be the expired one, so take
 		//no chances and update it
+		//lint:ignore SA4001 the rest client object is necessary to mutate here
 		*&rest.RestClient.IdToken = creds.IdToken
 		//This will be done in the background so no error handling needed
 		dbJSON, _ := rest.RestClient.GetAll()
@@ -41,7 +42,7 @@ func (s storeStruct) Sync(force bool) {
 			//Flag to confirm that this is a new item
 			newItem := true
 			for i, lItem := range localJSON {
-				if item.Id == lItem.Id {
+				if item.ID == lItem.ID {
 					newItem = false
 					if item.Title != lItem.Title || item.Content != lItem.Content {
 						//Look for mutated items and update them
@@ -52,7 +53,7 @@ func (s storeStruct) Sync(force bool) {
 							if lts > ts {
 								//This item was edited in the CLI,
 								//But the user was offline. Update it
-								rest.RestClient.Set(lItem.Id, lItem.Title, lItem.Content, lItem.LastEdited)
+								rest.RestClient.Set(lItem.ID, lItem.Title, lItem.Content, lItem.LastEdited)
 							} else {
 								//This item got updated on the web app. Update it
 								localJSON[i] = item
@@ -69,12 +70,12 @@ func (s storeStruct) Sync(force bool) {
 			}
 		}
 		for i, lItem := range localJSON {
-			if lItem.New == true {
+			if lItem.New {
 				//This item was added from the CLI but the user was offline.
 				//Update it
 				if util.IsOnline() {
 					lItem.New = false
-					rest.RestClient.Set(lItem.Id, lItem.Title, lItem.Content, lItem.LastEdited)
+					rest.RestClient.Set(lItem.ID, lItem.Title, lItem.Content, lItem.LastEdited)
 				} else {
 					continue
 				}
@@ -82,7 +83,7 @@ func (s storeStruct) Sync(force bool) {
 			//A flag to confirm that this a deleted item
 			deletedItem := true
 			for _, item := range dbJSON {
-				if item.Id == lItem.Id {
+				if item.ID == lItem.ID {
 					deletedItem = false
 				}
 			}
@@ -105,7 +106,7 @@ func (s storeStruct) Sync(force bool) {
 		})
 		toWrite, _ := json.Marshal(localJSON)
 		timeStamp := time.Now().Unix()
-		ioutil.WriteFile(s.storeLoc, []byte(toWrite), s.filePermissions)
+		os.WriteFile(s.storeLoc, []byte(toWrite), s.filePermissions)
 		creds.StoreSyncTimestamp = timeStamp
 		credential.WriteCredentials(creds)
 		spinner.Stop()
