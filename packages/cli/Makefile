@@ -20,7 +20,7 @@ install:
 build:
 	make -j3 \
 	build/win \
-	build/darwin \
+	build/macos \
 	build/linux
 build/win:
 ifeq (${PROD},1)
