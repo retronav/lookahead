@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "baseUrl": ".",
+    "paths": {
+      "@src": ["../src"]
+    },
+    "types": ["cypress"]
+  },
+  "include": ["**/*.ts", "./support/commands.js"]
+}

@@ -1,7 +1,7 @@
 import { DBSchema, openDB } from 'idb';
 import type { ThemeType } from '../theme';
 
-const DB_NAME = 'appDB';
+export const DB_NAME = 'appDB';
 const DB_VERSION = 1;
 
 interface AppDB extends DBSchema {

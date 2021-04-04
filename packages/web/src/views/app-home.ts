@@ -27,12 +27,14 @@ export class AppHome extends LitElement {
       <p>Hello, ${this.user?.displayName ?? 'World'}!</p>
       ${this.user
         ? html` <app-mwc-accent-button
+            class="goto-app"
             @click=${this.route('/app')}
             raised
             label="App"
           ></app-mwc-accent-button>`
         : html`
             <app-mwc-accent-button
+              class="goto-sign-in"
               @click=${this.route('/signin')}
               raised
               label="Sign in to start

@@ -4,3 +4,7 @@ build
 node_modules
 types
 *.local
+cypress/videos
+cypress/screenshots
+log
+results

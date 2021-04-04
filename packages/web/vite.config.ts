@@ -4,6 +4,9 @@ import { defineConfig } from 'vite';
 const shouldAnalyze = process.env.ANALYZE;
 
 export default defineConfig({
+  server: {
+    port: 3000,
+  },
   build: {
     outDir: 'build',
     target: 'es2017',
