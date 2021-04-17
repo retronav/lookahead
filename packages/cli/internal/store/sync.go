@@ -31,8 +31,7 @@ func (s storeStruct) Sync(force bool) {
 		spinner.Start()
 		//The id token with the restClient might be the expired one, so take
 		//no chances and update it
-		//lint:ignore SA4001 the rest client object is necessary to mutate here
-		*&rest.RestClient.IdToken = creds.IdToken
+		rest.RestClient.UpdateIdToken(creds.IdToken)
 		//This will be done in the background so no error handling needed
 		dbJSON, _ := rest.RestClient.GetAll()
 		localJSON, _ := s.GetAll()
