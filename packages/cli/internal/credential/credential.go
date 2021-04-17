@@ -46,6 +46,7 @@ func ReadCredentials() CredentialsStruct {
 	return CredentialsStruct{}
 }
 
+//WriteCredentials Writes the credentials in a file
 func WriteCredentials(data CredentialsStruct) error {
 	credsLoc := GetCredentialsLocation()
 	dataToWrite, _ := json.Marshal(data)
@@ -71,6 +72,8 @@ func WriteCredentials(data CredentialsStruct) error {
 	}
 	return nil
 }
+
+//CheckIfUserLoggedIn Check if the user is logged in by reading the credentials
 func CheckIfUserLoggedIn() bool {
 	creds := ReadCredentials()
 	if creds.IdToken != "" && creds.RefreshToken != "" {
