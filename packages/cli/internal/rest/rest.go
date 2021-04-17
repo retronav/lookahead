@@ -48,7 +48,7 @@ func (c restClientStruct) Add(title string, content string, last_edited string) 
 	resBody, _ := io.ReadAll(res.Body)
 	resMsg := gjson.GetBytes(resBody, "message").Str
 	if resMsg != "OK" {
-		return errors.New("There was some problem on our side. Sorry for incovenience!!")
+		return errors.New("there was some problem on our side. Sorry for incovenience")
 	}
 	return nil
 }
@@ -67,7 +67,7 @@ func (c restClientStruct) Delete(id string) error {
 	resBody, _ := io.ReadAll(res.Body)
 	resMsg := gjson.GetBytes(resBody, "message").Str
 	if resMsg != "OK" {
-		return errors.New("There was some problem on our side. Sorry for incovenience!!")
+		return errors.New("there was some problem on our side. Sorry for incovenience")
 	}
 	return nil
 }
@@ -129,9 +129,13 @@ func (c restClientStruct) Set(id string, title string, content string, last_edit
 	resBody, _ := io.ReadAll(res.Body)
 	resMsg := gjson.GetBytes(resBody, "message").Str
 	if resMsg != "OK" {
-		return errors.New("There was some problem on our side. Sorry for incovenience!!")
+		return errors.New("there was some problem on our side. Sorry for incovenience")
 	}
 	return nil
+}
+
+func (s *restClientStruct) UpdateIdToken(token string) {
+	s.IdToken = token
 }
 
 var RestClient restClientStruct = restClientStruct{
