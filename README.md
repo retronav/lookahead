@@ -1,48 +1,39 @@
 <p align="center">
-<img src="./packages/web/public/logo-192.png"></img>
+<img src="./packages/branding/logo-light-circle.png"></img>
 
 <h1 align="center">Lookahead</h1>
 
 <p align="center">The fast, beautiful to-do and notes app for everyone.</p>
 </p>
 
-<p align="center">
+<!-- <p align="center">
     <img width="80%" src="./packages/branding/app-screenshot.png"></img>
-</p>
+</p> -->
 
-# Visit the app!
+# Usage
 
-The web app has been hosted with Firebase hosting.<br />
+## Web
+
 To see the latest version, visit
 https://lookahead.web.app (not deployed yet)<br />
 To see the latest development build, visit
 https://lookahead-dev.web.app
 
+## CLI
+
+You can visit the recent Github Actions build to download the latest (unstable!) CLI build or build it yourself.
+
+> **Note:** The build hosted at lookahead-dev.web.app is the previous Next.js build
+> which will be replaced soon with the new Web Components build.
+
 # Current status
 
-This app is current in development. I hope this app to reach production soon :).
+Real work has just started! Its only a matter of time for this idea to become a reality.
 
-# Tech Stack
+# Documentation
 
-## The web app
-
-1. React w/ [Material UI](https://material-ui.com)
-2. Vite (bundler)
-3. [react-snap](https://www.npmjs.com/package/react-snap) (for [pre-rendering](https://web.dev/prerender-with-react-snap/))
-
-## The CLI
-
-1. [Go](https://go.dev/)
-2. [Cobra](https://cobra.dev/) (framework for the CLI)
-
-## Serverless
-
-1. Hosted on [Vercel](https://vercel.com/)
+There is no real documentation for anything since work is still going on on everything.
 
 # Contributing
 
-See CONTRIBUTING.md (not uploaded yet)
-
-# Documentation status (CLI)
-
-The CLI is still far away from becoming a MVP, so documentation work will be procrastinated till I finish working on the CLI.
+A file called CONTRIBUTING.md will be pushed soon which will contain all the little things you might need to start contributing. For now, just fork the repo, do what you'd like to, and if its useful, come and submit a PR!
