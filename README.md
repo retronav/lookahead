@@ -6,6 +6,10 @@
 <p align="center">The fast, beautiful to-do and notes app for everyone.</p>
 </p>
 
+<p align="center">
+    <img src="https://img.shields.io/discord/783381948835430431?color=7289da&label=discord&logo=discord&style=plastic" />
+</p>
+
 <!-- <p align="center">
     <img width="80%" src="./packages/branding/app-screenshot.png"></img>
 </p> -->
