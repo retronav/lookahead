@@ -1,19 +1,20 @@
 {
+  "include": ["src", "./src/types.d.ts"],
   "compilerOptions": {
-    "target": "es6",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": false,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "esModuleInterop": true,
     "module": "esnext",
+    "target": "esnext",
     "moduleResolution": "node",
+    "jsx": "preserve",
+    "noEmit": true,
+    /* LitElement - Add decorator support! */
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    /* Additional Options */
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve"
-  },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+    "allowSyntheticDefaultImports": true,
+    "importsNotUsedAsValues": "error"
+  }
 }

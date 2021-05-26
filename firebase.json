@@ -47,7 +47,7 @@
     },
     {
       "target": "dev",
-      "public": "packages/web/out",
+      "public": "packages/web/build",
       "ignore": [
         "firebase.json",
         "**/.*",

@@ -1,17 +1,18 @@
-context("Lookahead Web App - Landing Page", async () => {
-  beforeEach(() => {
-    cy.visit("http://localhost:3000");
+describe('Landing page', () => {
+  const title = 'Lookahead Alpha';
+  it('Window title should be the correct one', () => {
+    cy.visit('/');
+    cy.title().should('equal', title);
   });
-  it("should load the landing page without error", () => {});
-  it("should contain a heading which changes tags according to viewport", () => {
-    cy.viewport("iphone-7");
-    cy.get("h2").contains("This is Lookahead.");
-    cy.viewport("macbook-16");
-    cy.get("h1").contains("This is Lookahead.");
-  });
-  it("sign in button should route to /signin", () => {
-    const button = cy.get("a").contains("Sign in to start using");
-    button.click();
-    cy.url().should("contain", "/signin");
+  it('Should contain a signin button that will lead to the signin page', () => {
+    // The app loads the file on route to signin so intercept the file instead
+    cy.intercept('/app-signin.ts').as('signInModuleLoaded');
+    cy.visit('/');
+    cy.get('app-home')
+      .shadow()
+      .find('app-mwc-accent-button.goto-sign-in')
+      .click();
+    cy.wait('@signInModuleLoaded');
+    cy.window().url().should('contain', '/signin');
   });
 });

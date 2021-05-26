@@ -1,0 +1,40 @@
+@import url('./material-icons.css');
+@import url('https://rsms.me/inter/inter.css');
+html {
+  font-family: 'Inter', sans-serif;
+}
+@supports (font-variation-settings: normal) {
+  html {
+    font-family: 'Inter var', sans-serif;
+  }
+}
+
+html::-webkit-scrollbar {
+  width: 1em;
+  scrollbar-width: thin;
+}
+html::-webkit-scrollbar-thumb {
+  background-color: #aaa;
+  border-radius: 6px;
+  border: 0.2em solid var(--mdc-theme-surface, '#000000');
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: var(--mdc-theme-surface, '#ffffff');
+  color: var(--mdc-theme-on-surface, '#000000');
+}
+.margin-wrap {
+  margin: 0 1em;
+}
+
+app-root,
+app-404,
+app-dash,
+app-home,
+app-signin {
+  width: 100%;
+  height: 100%;
+}

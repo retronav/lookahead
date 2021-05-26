@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Lookahead Alpha, a complete rewrite of Lookahead's web app"
+    />
+    <link rel="stylesheet" type="text/css" href="/index.css" />
+    <title>Lookahead Alpha</title>
+  </head>
+  <body>
+    <app-navbar></app-navbar>
+    <div class="margin-wrap">
+      <app-root></app-root>
+      <!-- Other globally accessible UI components -->
+      <app-snackbar></app-snackbar>
+    </div>
+    <noscript>
+      Oops! Looks like you don't like JavaScript. But you need to enable it to
+      run this app and be awesome!
+    </noscript>
+    <script type="module" src="/src/index.ts"></script>
+  </body>
+</html>
