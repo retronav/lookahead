@@ -1,0 +1,49 @@
+.methods {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  mat-card {
+    margin: 0 1em;
+    text-align: center;
+  }
+}
+
+.email-sent {
+  text-align: center;
+  overflow-x: hidden;
+  .send-icon {
+    user-select: none;
+    font-size: 6em;
+    height: 1em;
+    width: 1em;
+    margin: 0.25em 0;
+    cursor: pointer;
+    animation: bulge 2s infinite ease 1s;
+    &:hover {
+      animation: throw-airplane 3s 1 ease;
+    }
+  }
+}
+
+@keyframes bulge {
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes throw-airplane {
+  30% {
+    transform: translateX(-2em);
+  }
+  60% {
+    transform: translateX(110vw);
+  }
+  61% {
+    transform: translateX(-100vw);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}

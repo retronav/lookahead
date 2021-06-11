@@ -1,0 +1,51 @@
+@use '~@angular/material' as mat;
+@use 'sass:map';
+@use "../../../styles.scss" as theme;
+
+article.landing-article {
+  user-select: none;
+  // We don't want a gap between this element and the navbar, so remove it.
+  margin-top: -10px;
+  padding: 4em 0;
+  background-color: map.get(theme.$lookahead-web-primary, 600);
+  color: map.get(theme.$lookahead-web-primary, darker-contrast);
+  text-align: center;
+  $landing-article-typography: mat.define-typography-config(
+    $font-family: theme.$lookahead-font-family,
+    $headline: mat.define-typography-level(4rem, 4rem, 600),
+  );
+  .headline {
+    @include mat.typography-level($landing-article-typography, "headline");
+  }
+}
+
+.features,
+.tryme {
+  margin-top: 0.5em;
+  text-align: center;
+}
+
+.features {
+  h1 {
+    font-weight: light;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    mat-card {
+      margin: 0.5em;
+      min-height: 3em;
+      mat-icon {
+        width: 100%;
+        text-align: center;
+        font-size: 3em;
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .cards {
+    grid-template-columns: 1fr !important;
+  }
+}

@@ -1,0 +1,26 @@
+article {
+  text-align: center;
+}
+
+.black-hole {
+  user-select: none;
+  width: 112px;
+  height: auto;
+  animation: black-hole-rotate 10s linear infinite forwards;
+  margin-bottom: -7px; // This makes it inline with the text.
+}
+
+@keyframes black-hole-rotate {
+  25% {
+    transform: translateX(-3px) rotate(90deg);
+  }
+  50% {
+    transform: translateX(0px) rotate(180deg);
+  }
+  75% {
+    transform: translateX(3px) rotate(270deg);
+  }
+  100% {
+    transform: translateX(0px) rotate(360deg);
+  }
+}

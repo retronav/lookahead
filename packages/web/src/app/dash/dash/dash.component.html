@@ -1,0 +1,6 @@
+<h1>Details</h1>
+
+<div *ngIf="currentUser">
+  <p>{{ currentUser.displayName ?? "You don't have a name ;)" }}</p>
+  <p>{{ currentUser.email }}</p>
+</div>

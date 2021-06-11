@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en-GB" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="landing.title" datatype="html">
+        <source> This is Lookahead. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/dash/landing/landing.component.html</context>
+          <context context-type="linenumber">3,4</context>
+        </context-group>
+        <note priority="1" from="description">landing page title</note>
+      </trans-unit>
+      <trans-unit id="landing.subtitle" datatype="html">
+        <source> The fast and beautiful notes app for everyone. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/dash/landing/landing.component.html</context>
+          <context context-type="linenumber">6,7</context>
+        </context-group>
+        <note priority="1" from="description">landing page subtitle</note>
+      </trans-unit>
+      <trans-unit id="signin.email.title" datatype="html">
+        <source>Email</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/dash/signin/signin.component.html</context>
+          <context context-type="linenumber">6,7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="signin.email.label" datatype="html">
+        <source>Enter your email</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/dash/signin/signin.component.html</context>
+          <context context-type="linenumber">9,10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="signin.email.errors.invaildEmail" datatype="html">
+        <source> Please enter a valid email address </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/dash/signin/signin.component.html</context>
+          <context context-type="linenumber">25,27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="signin.email.errors.required" datatype="html">
+        <source> Email is <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>required<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/dash/signin/signin.component.html</context>
+          <context context-type="linenumber">31,32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="signin.email.signInButton" datatype="html">
+        <source> Sign in </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/dash/signin/signin.component.html</context>
+          <context context-type="linenumber">43,46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="signin.google.signInButton" datatype="html">
+        <source> Sign in with Google </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/dash/signin/signin.component.html</context>
+          <context context-type="linenumber">57,62</context>
+        </context-group>
+        <note priority="1" from="description">Text for button which is used to sign in using
+            Google</note>
+      </trans-unit>
+      <trans-unit id="signin.emailSent" datatype="html">
+        <source> Open your mailbox and click the link to sign in. You can close this tab. </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/dash/signin/signin.component.html</context>
+          <context context-type="linenumber">68,71</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.errors.googleSignInFailed" datatype="html">
+        <source>Failed to sign in using Google: <x id="PH" equiv-text="this.localizeAuthError.transform(
+          error
+        )"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/dash/signin/signin.component.ts</context>
+          <context context-type="linenumber">36,35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="firebase.auth.errors.adminOnlyOperation" datatype="html">
+        <source>This operation can be done only by administrators.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pipes/localize-auth-error.pipe.ts</context>
+          <context context-type="linenumber">113</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="firebase.auth.errors.invalidOrigin" datatype="html">
+        <source>The current domain is not authorized for the operation.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pipes/localize-auth-error.pipe.ts</context>
+          <context context-type="linenumber">114</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="firebase.auth.errors.cancelledPopUpRequest" datatype="html">
+        <source>The popup request was cancelled by the user.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/pipes/localize-auth-error.pipe.ts</context>
+          <context context-type="linenumber">115</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

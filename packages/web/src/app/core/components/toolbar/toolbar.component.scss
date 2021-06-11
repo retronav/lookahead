@@ -1,0 +1,16 @@
+.fixed {
+  position: fixed;
+  top: 0;
+  z-index: 10;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+img.user-avatar {
+  object-fit: contain;
+  width: calc(100%);
+  height: auto;
+  border-radius: 50%;
+}

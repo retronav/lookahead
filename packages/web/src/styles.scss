@@ -1,0 +1,89 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '~@angular/material' as mat;
+// Plus imports for other components in your app.
+@import "~@angular/material/theming";
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$lookahead-web-primary: mat.define-palette(mat.$purple-palette);
+$lookahead-web-accent: mat.define-palette(mat.$teal-palette, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$lookahead-web-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$lookahead-web-theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: $lookahead-web-primary,
+      accent: $lookahead-web-accent,
+      warn: $lookahead-web-warn,
+    ),
+  )
+);
+
+$lookahead-font-family: '"Inter", "Helvetica Neue", "Segoe UI", "Roboto", sans-serif';
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+$custom-typography: mat-typography-config(
+  $font-family: $lookahead-font-family,
+);
+@include mat.core($custom-typography);
+@include mat.all-component-themes($lookahead-web-theme);
+
+/* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: $lookahead-font-family;
+  background-color: #121212;
+  color: white;
+}
+
+// Anchors with routerLink attributes are used as wrappers around buttons so we can remove
+// the color and underline.
+a[routerlink] {
+  text-decoration: none;
+  color: unset;
+}
+
+// Set anchor color to white.
+a,
+a:visited {
+  color: white;
+}
+
+// Custom scrollbar.
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #141414;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #777;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}

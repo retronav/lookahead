@@ -1,0 +1,21 @@
+@use "~@angular/material/toolbar/toolbar-variables" as toolbar;
+main {
+  position: relative;
+}
+
+// An extra padding of 10px is applied to avoid .app-content things sticking
+// to the navbar.
+$height-desktop-with-padding: toolbar.$height-desktop + 10px;
+$height-mobile-with-padding: toolbar.$height-mobile + 10px;
+
+.app-content {
+  padding-top: $height-desktop-with-padding;
+  height: calc(100% - $height-desktop-with-padding);
+}
+
+@media (max-width: 576px) {
+  .app-content {
+    padding-top: $height-mobile-with-padding;
+    height: calc(100% - $height-mobile-with-padding);
+  }
+}

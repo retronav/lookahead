@@ -1,0 +1,24 @@
+<mat-toolbar class="fixed" [class.mat-elevation-z10]="true">
+  <a mat-button routerLink="/">
+    <span class="title">{{ title }}</span>
+  </a>
+
+  <span class="spacer"></span>
+
+  <button mat-icon-button>
+    <ng-container
+      *ngIf="
+        afAuth.currentUser && afAuth.currentUser.photoURL;
+        else noCurrentUserOrPhoto
+      "
+    >
+      <img class="user-avatar" src="{{ afAuth.currentUser.photoURL }}" alt="" />
+    </ng-container>
+  </button>
+</mat-toolbar>
+
+<ng-template #noCurrentUserOrPhoto>
+  <mat-icon>account_circle</mat-icon>
+</ng-template>
+
+<mat-menu></mat-menu>

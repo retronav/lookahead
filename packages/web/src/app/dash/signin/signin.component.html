@@ -1,0 +1,71 @@
+<ng-container *ngIf="!emailSent; else emailSentTemplate">
+  <h1 class="mat-display-3">Select a method to sign in</h1>
+  <section class="methods">
+    <mat-card class="email">
+      <mat-card-title
+        ><h1 i18n="@@signin.email.title">Email</h1></mat-card-title
+      >
+      <mat-form-field>
+        <mat-label i18n="@@signin.email.label">Enter your email</mat-label>
+        <input
+          matInput
+          type="email"
+          [formControl]="emailFormControl"
+          placeholder="you@domain.tld"
+          (keyup.enter)="sendEmailLink()"
+          required
+        />
+        <mat-error
+          *ngIf="
+            emailFormControl.hasError('email') &&
+            !emailFormControl.hasError('required')
+          "
+          i18n="@@signin.email.errors.invaildEmail"
+        >
+          Please enter a valid email address
+        </mat-error>
+        <mat-error
+          *ngIf="emailFormControl.hasError('required')"
+          i18n="@@signin.email.errors.required"
+        >
+          Email is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <br />
+      <button
+        type="submit"
+        color="primary"
+        mat-raised-button
+        [disabled]="!emailFormControl.valid"
+        (click)="sendEmailLink()"
+        i18n="@@signin.email.signInButton"
+      >
+        Sign in
+      </button>
+    </mat-card>
+    <mat-card class="google">
+      <mat-card-title><h1>Google</h1></mat-card-title>
+      <mat-card-content>
+        <button
+          color="primary"
+          mat-raised-button
+          (click)="signInWithGoogle()"
+          i18n="
+            Text for button which is used to sign in using
+            Google@@signin.google.signInButton"
+        >
+          Sign in with Google
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </section>
+</ng-container>
+
+<ng-template #emailSentTemplate>
+  <div class="email-sent">
+    <mat-icon class="send-icon">send</mat-icon>
+    <h1 class="mat-display-1" i18n="@@signin.emailSent">
+      Open your mailbox and click the link to sign in. You can close this tab.
+    </h1>
+  </div>
+</ng-template>

@@ -1,0 +1,83 @@
+<article class="landing-article">
+  <h1 i18n="landing page title@@landing.title" class="headline">
+    This is Lookahead.
+  </h1>
+  <h2 i18n="landing page subtitle@@landing.subtitle" class="mat-h2">
+    The fast and beautiful notes app for everyone.
+  </h2>
+  <br /><br />
+  <a routerLink="/signin">
+    <button mat-raised-button>Sign In</button>
+  </a>
+  <!-- A hack to keep some space between the buttons. -->
+  <span>{{ "  " }}</span>
+  <a routerLink="/demo">
+    <button mat-raised-button>Try the demo</button>
+  </a>
+</article>
+<section class="features">
+  <h1 class="mat-display-2">Features</h1>
+  <div class="cards">
+    <mat-card>
+      <mat-icon>speed</mat-icon>
+      <h1>Fast</h1>
+      <p>
+        The app stays blazing fast, allowing you to keep taking notes without a
+        hiccup.
+      </p>
+    </mat-card>
+    <mat-card>
+      <mat-icon>lock</mat-icon>
+      <mat-card-title>
+        <h1>Secure</h1>
+      </mat-card-title>
+      <mat-card-content>
+        <p>
+          End-to-end encryption of your notes across all of your devices
+          prevents eavesdroppers from poking into your thoughts.
+        </p>
+      </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-icon>signal_cellular_connected_no_internet_4_bar</mat-icon>
+      <mat-card-title>
+        <h1>Offline</h1>
+      </mat-card-title>
+      <mat-card-content>
+        <p>
+          Lookahead also works when you are offline. It needs the Internet only
+          to sync your notes across your devices.
+        </p>
+      </mat-card-content>
+    </mat-card>
+    <mat-card>
+      <mat-icon>content_paste</mat-icon>
+      <mat-card-title>
+        <h1>More than just notes</h1>
+      </mat-card-title>
+      <mat-card-content>
+        <p>
+          Add to-dos, set reminders, enrich your notes with images and videos.
+        </p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <br />
+  <br />
+  <h1 class="mat-display-2">Also available as a CLI!</h1>
+  <h2 class="title">
+    If you basically live in the terminal and want to use Lookahead there, we
+    got you covered! Take a look at the official CLI tool!
+  </h2>
+</section>
+
+<br />
+<hr />
+<br />
+
+<section class="tryme">
+  <h1 class="mat-display-3">So, what are you waiting for?</h1>
+  <a routerLink="/signin" mat-flat-button>Sign in</a>
+  Or
+  <a routerLink="/demo" mat-flat-button>Check out a demo version</a>
+</section>
